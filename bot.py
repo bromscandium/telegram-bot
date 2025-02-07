@@ -1,6 +1,5 @@
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
 from commands import *
-
 from interactions import (
     welcome, reaction
 )
