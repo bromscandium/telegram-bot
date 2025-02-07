@@ -1,11 +1,5 @@
-from telegram import Update
-from config import CHAT_ID, ALLOWED_IDS
+from config import CHAT_ID
 from interactions import *
-
-command_usage = {}
-
-MAX_USAGE = 2
-RESET_TIME_SECONDS = 300
 
 
 @limit_usage

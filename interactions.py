@@ -1,9 +1,10 @@
 import random
 import asyncio
-from config import REACTIONS, ALLOWED_IDS
+from config import REACTIONS, ALLOWED_IDS, MAX_USAGE, RESET_TIME_SECONDS
 from telegram import Update
 
 message_counter = 0
+command_usage = {}
 
 
 async def welcome(update: Update, context):
