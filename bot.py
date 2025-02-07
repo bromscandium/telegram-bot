@@ -1,6 +1,6 @@
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
 from commands import *
-from forwarding import forward_news, get_thread_id
+
 from interactions import (
     welcome, reaction
 )
@@ -25,7 +25,6 @@ def main():
     bot.add_handler(CommandHandler("unmute", unmute))
     bot.add_handler(CommandHandler("unban", unban))
 
-    bot.add_handler(MessageHandler(filters.TEXT, get_thread_id))
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
     bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reaction))
 
