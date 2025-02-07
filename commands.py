@@ -1,7 +1,14 @@
 from telegram import Update
 from config import CHAT_ID, ALLOWED_IDS
+from interactions import *
+
+command_usage = {}
+
+MAX_USAGE = 2
+RESET_TIME_SECONDS = 300
 
 
+@limit_usage
 async def help(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -25,6 +32,7 @@ Ak ešte stále máš otázky, možno je problém inde.''',
         )
 
 
+@limit_usage
 async def rules(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -40,6 +48,7 @@ async def rules(update: Update, context):
         )
 
 
+@limit_usage
 async def moodle_passwords(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -55,6 +64,7 @@ async def moodle_passwords(update: Update, context):
         )
 
 
+@limit_usage
 async def links(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -70,6 +80,7 @@ async def links(update: Update, context):
         )
 
 
+@limit_usage
 async def scores(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -85,6 +96,7 @@ async def scores(update: Update, context):
         )
 
 
+@limit_usage
 async def schedule(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -100,6 +112,7 @@ async def schedule(update: Update, context):
         )
 
 
+@limit_usage
 async def map_tuke(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -115,6 +128,7 @@ async def map_tuke(update: Update, context):
         )
 
 
+@limit_usage
 async def map_5p(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -130,6 +144,7 @@ async def map_5p(update: Update, context):
         )
 
 
+@limit_usage
 async def studijne(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return

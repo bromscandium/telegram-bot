@@ -1,4 +1,5 @@
 import random
+import asyncio
 from config import REACTIONS, ALLOWED_IDS
 from telegram import Update
 
@@ -37,3 +38,33 @@ async def reaction(update: Update, context):
             random_reaction = random.choice(REACTIONS)
             await update.message.set_reaction(reaction=random_reaction, is_big=False)
             message_counter = 0
+
+
+async def reset_command_usage(user_id: int, command: str):
+    await asyncio.sleep(RESET_TIME_SECONDS)
+    command_usage[user_id][command] -= 1
+    if command_usage[user_id][command] <= 0:
+        command_usage[user_id].pop(command)
+    if not command_usage[user_id]:
+        command_usage.pop(user_id)
+
+
+def limit_usage(func):
+    async def wrapper(update: Update, context):
+        user_id = update.effective_user.id
+        command = func.__name__
+
+        if user_id not in command_usage:
+            command_usage[user_id] = {}
+
+        if command not in command_usage[user_id]:
+            command_usage[user_id][command] = 0
+
+        if command_usage[user_id][command] >= MAX_USAGE:
+            return
+
+        command_usage[user_id][command] += 1
+        asyncio.create_task(reset_command_usage(user_id, command))
+        await func(update, context)
+
+    return wrapper
