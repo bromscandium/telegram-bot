@@ -1,8 +1,13 @@
+import random
+from config import REACTIONS, ALLOWED_IDS
 from telegram import Update
-from telegram.ext import filters
+
+message_counter = 0
 
 
 async def welcome(update: Update, context):
+    if update.message.chat.id not in ALLOWED_IDS:
+        return
     if update.message.new_chat_members:
         for user in update.message.new_chat_members:
             name = user.full_name
@@ -21,3 +26,14 @@ async def welcome(update: Update, context):
                 "Uvidíme, či z teba niečo bude, alebo skončíš v tradičnom zozname.",
                 parse_mode="HTML"
             )
+
+
+async def reaction(update: Update, context):
+    global message_counter
+
+    if update.message:
+        message_counter += 1
+        if message_counter % random.randint(100, 200) == 0:
+            random_reaction = random.choice(REACTIONS)
+            await update.message.set_reaction(reaction=random_reaction, is_big=False)
+            message_counter = 0
