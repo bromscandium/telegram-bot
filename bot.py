@@ -28,7 +28,7 @@ def main():
     bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reaction))
 
     print("Starting Telegram Bot...")
-    bot.run_polling()
+    bot.run_polling(drop_pending_updates=True)
 
 
 if __name__ == '__main__':
