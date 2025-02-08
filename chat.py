@@ -17,9 +17,7 @@ async def handle_message(update: Update, context):
     user_id = update.message.from_user.id
 
     if user_id in user_state and user_state[user_id] == 'waiting_for_message':
-        if update.message.text:
-            text_to_send = update.message.text
-
+        text_to_send = update.message.text
         text_to_send += "\n#пишутьгенчі"
 
         if update.message.text:
