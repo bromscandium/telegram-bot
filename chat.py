@@ -17,12 +17,17 @@ async def handle_message(update: Update, context):
     user_id = update.message.from_user.id
 
     if user_id in user_state and user_state[user_id] == 'waiting_for_message':
-        text_to_send = update.message.text
+        text_to_send = ""
+        if update.message.text is not None:
+            text_to_send = update.message.text if update.message.text else ""
+        elif update.message.caption is not None:
+            text_to_send = update.message.caption if update.message.caption else ""
         text_to_send += "\n#пишутьгенчі"
-
+        print(text_to_send)
         if update.message.text:
             await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=text_to_send)
-        elif update.message.photo:
+
+        if update.message.photo:
             await context.bot.send_photo(chat_id=ADMIN_CHAT_ID, photo=update.message.photo[-1].file_id,
                                          caption=text_to_send)
         elif update.message.video:
