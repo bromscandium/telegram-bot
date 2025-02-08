@@ -1,5 +1,5 @@
 from telegram import Update
-from config import CHAT_ID
+from config import CHAT_ID, ALLOWED_IDS
 from interactions import limit_usage
 
 
