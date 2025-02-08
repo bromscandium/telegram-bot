@@ -1,9 +1,17 @@
+from telegram import Update
 from config import CHAT_ID
-from interactions import *
+from interactions import limit_usage
+
+
+@limit_usage
+async def private_restrictions(update: Update, context):
+    if update.message.chat.type == "private":
+        await update.message.reply_text('Je nám ľúto, ale v súkromnom chate to nefunguje. Len /start.')
 
 
 @limit_usage
 async def help(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -28,6 +36,7 @@ Ak ešte stále máš otázky, možno je problém inde.''',
 
 @limit_usage
 async def rules(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -44,6 +53,7 @@ async def rules(update: Update, context):
 
 @limit_usage
 async def moodle_passwords(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -60,6 +70,7 @@ async def moodle_passwords(update: Update, context):
 
 @limit_usage
 async def links(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -76,6 +87,7 @@ async def links(update: Update, context):
 
 @limit_usage
 async def scores(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -92,6 +104,7 @@ async def scores(update: Update, context):
 
 @limit_usage
 async def schedule(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -108,6 +121,7 @@ async def schedule(update: Update, context):
 
 @limit_usage
 async def map_tuke(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -124,6 +138,7 @@ async def map_tuke(update: Update, context):
 
 @limit_usage
 async def map_5p(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -140,6 +155,7 @@ async def map_5p(update: Update, context):
 
 @limit_usage
 async def studijne(update: Update, context):
+    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
