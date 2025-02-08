@@ -152,23 +152,3 @@ async def studijne(update: Update, context):
             from_chat_id=CHAT_ID,
             message_id=72
         )
-
-
-async def mute(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-
-
-async def unmute(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-
-
-async def ban(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-
-
-async def unban(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
