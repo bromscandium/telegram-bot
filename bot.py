@@ -3,6 +3,7 @@ from commands import *
 from interactions import (
     welcome, reaction
 )
+from admin import *
 from config import TOKEN
 
 
