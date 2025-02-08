@@ -15,6 +15,8 @@ async def start(update: Update, context):
 
 async def handle_message(update: Update, context):
     user_id = update.message.from_user.id
+    username = update.message.from_user.username
+    fullname = update.message.from_user.full_name
 
     if user_id in user_state and user_state[user_id] == 'waiting_for_message':
         text_to_send = ""
@@ -22,8 +24,7 @@ async def handle_message(update: Update, context):
             text_to_send = update.message.text if update.message.text else ""
         elif update.message.caption is not None:
             text_to_send = update.message.caption if update.message.caption else ""
-        text_to_send += "\n#пишутьгенчі"
-        print(text_to_send)
+        text_to_send += f"\n\n#пишутьгенчі\nid{user_id}\n@{username}\n{fullname}"
         if update.message.text:
             await context.bot.send_message(chat_id=ADMIN_CHAT_ID, text=text_to_send)
 
