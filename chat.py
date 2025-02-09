@@ -14,6 +14,10 @@ async def start(update: Update, context):
 
 
 async def handle_message(update: Update, context):
+    chat_type = update.message.chat.type
+    if chat_type != 'private':
+        return
+
     user_id = update.message.from_user.id
     username = update.message.from_user.username
     fullname = update.message.from_user.full_name

@@ -11,7 +11,7 @@ from chat import start, handle_message
 def main():
     bot = ApplicationBuilder().token(TOKEN).build()
 
-    bot.add_handler(CommandHandler("start", start))
+    #bot.add_handler(CommandHandler("start", start))
     #bot.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, handle_message))
 
     bot.add_handler(CommandHandler("help", help))
