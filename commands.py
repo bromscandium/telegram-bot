@@ -160,7 +160,7 @@ async def studijne(update: Update, context):
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/72">čítali ste kanál ASAP?</a>?',
+            '<a href="https://t.me/c/2307996875/4/72">čítali ste kanál ASAP?</a>',
             parse_mode="HTML"
         )
         await context.bot.copy_message(
