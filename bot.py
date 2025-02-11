@@ -1,20 +1,22 @@
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
+
+from chat import start, start_message
 from commands import *
 from interactions import (
     welcome, reaction
 )
 from admin import *
 from config import TOKEN
-from chat import start, handle_message
 
 
 def main():
     bot = ApplicationBuilder().token(TOKEN).build()
 
-    #bot.add_handler(CommandHandler("start", start))
-    #bot.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, handle_message))
+    bot.add_handler(CommandHandler("start", start))
+    bot.add_handler(MessageHandler(filters.TEXT | filters.PHOTO | filters.VIDEO | filters.ATTACHMENT, start_message))
 
     bot.add_handler(CommandHandler("help", help))
+    bot.add_handler(CommandHandler("plan", plan))
     bot.add_handler(CommandHandler("schedule", schedule))
     bot.add_handler(CommandHandler("rules", rules))
     bot.add_handler(CommandHandler("moodle_passwords", moodle_passwords))
@@ -23,6 +25,7 @@ def main():
     bot.add_handler(CommandHandler("map_tuke", map_tuke))
     bot.add_handler(CommandHandler("map_5p", map_5p))
     bot.add_handler(CommandHandler("studijne", studijne))
+    bot.add_handler(CommandHandler("invite", invite))
 
     bot.add_handler(CommandHandler("ban", ban))
     bot.add_handler(CommandHandler("mute", mute))
