@@ -4,14 +4,7 @@ from interactions import limit_usage
 
 
 @limit_usage
-async def private_restrictions(update: Update, context):
-    if update.message.chat.type == "private":
-        await update.message.reply_text('Je nám ľúto, ale v súkromnom chate to nefunguje. Len /start.')
-
-
-@limit_usage
 async def help(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
@@ -28,6 +21,7 @@ Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 🗺 /map_tuke – Mapa TUKE, lebo po troch rokoch stále netrafíš do správnej miestnosti.
 🏛 /map_5p – Mapa 5. poschodia hlavnej budovy, aby si sa tam nestratil ako naposledy.
 📩 /studijne – Informácie o študijnom oddelení, kde aj tak neodpovedajú, keď ich potrebuješ.
+📩 /invite – Neverím, že máš priateľov, ale môžeš ich pozvať.
 
 Ak ešte stále máš otázky, možno je problém inde.''',
             parse_mode="HTML"
@@ -36,135 +30,165 @@ Ak ešte stále máš otázky, možno je problém inde.''',
 
 @limit_usage
 async def rules(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/52">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/52">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            from_chat_id=CHAT_ID,
-            message_id=52
+            text="Je tam príliš veľa textu, môžete si na tlačidlo kliknúť aj samostatne!",
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
 async def moodle_passwords(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/56">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/56">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=56
+            message_id=56,
+            message_thread_id=update.message.message_thread_id,
         )
 
 
 @limit_usage
 async def links(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/57">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/57">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            from_chat_id=CHAT_ID,
-            message_id=57
+            text="Je tam príliš veľa textu, môžete si na tlačidlo kliknúť aj samostatne!",
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
 async def scores(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/63">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/63">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            from_chat_id=CHAT_ID,
-            message_id=63
+            text="Je tam príliš veľa textu, môžete si na tlačidlo kliknúť aj samostatne!",
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
-async def schedule(update: Update, context):
-    await private_restrictions(update, context)
+async def plan(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/67">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/67">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=67
+            message_id=67,
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
 async def map_tuke(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/68">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/68">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=68
+            message_id=68,
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
 async def map_5p(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/69">čítali ste kanál ASAP?</a>?',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/69">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=69
+            message_id=69,
+            message_thread_id=update.message.message_thread_id
         )
 
 
 @limit_usage
 async def studijne(update: Update, context):
-    await private_restrictions(update, context)
     if update.message.chat.id not in ALLOWED_IDS:
         return
     if update.message:
         await update.message.reply_text(
-            '<a href="https://t.me/c/2307996875/4/72">čítali ste kanál ASAP?</a>',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/72">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.copy_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=72
+            message_id=72,
+            message_thread_id=update.message.message_thread_id
+        )
+
+
+@limit_usage
+async def schedule(update: Update, context):
+    if update.message.chat.id not in ALLOWED_IDS:
+        return
+    if update.message:
+        await update.message.reply_text(
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/4463>ASAP</a>?',
+            parse_mode="HTML"
+        )
+        await context.bot.forward_message(
+            chat_id=update.effective_chat.id,
+            from_chat_id=CHAT_ID,
+            message_id=4463,
+            message_thread_id=update.message.message_thread_id
+        )
+
+
+@limit_usage
+async def invite(update: Update, context):
+    if update.message.chat.id not in ALLOWED_IDS:
+        return
+    if update.message:
+        await update.message.reply_text(
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/52>ASAP</a>?',
+            parse_mode="HTML"
+        )
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="https://t.me/+oMLyG94WRD85YWIy",
+            message_thread_id=update.message.message_thread_id
         )
