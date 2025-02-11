@@ -13,7 +13,8 @@ async def help(update: Update, context):
 
 Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 
-📅 /schedule – Rozvrh na rok, aj tak si ho nikto poriadne nepozrie.
+📅 /plan – Rozvrh na rok, aj tak si ho nikto poriadne nepozrie.
+📅 /schedule – Rozvrh na semester, ktory tiez nikto nepozrie.
 📜 /rules – Pravidlá, ktoré si aj tak niektorí myslia, že pre nich neplatia
 🔐 /moodle_passwords – Heslá k Moodle, pre prípad, že si ich zase zabudol.
 🔗 /links – Odkazy na prednášky a cvičenia, ktoré budeš ignorovať až do skúškového.
