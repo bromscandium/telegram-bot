@@ -35,7 +35,7 @@ async def reaction(update: Update, context):
 
     if update.message:
         message_counter += 1
-        if message_counter % random.randint(100, 200) == 0:
+        if message_counter % random.randint(75, 150) == 0:
             random_reaction = random.choice(REACTIONS)
             await update.message.set_reaction(reaction=random_reaction, is_big=False)
             message_counter = 0
