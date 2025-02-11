@@ -13,7 +13,7 @@ def main():
     bot = ApplicationBuilder().token(TOKEN).build()
 
     bot.add_handler(CommandHandler("start", start))
-    bot.add_handler(MessageHandler(filters.TEXT | filters.PHOTO | filters.VIDEO | filters.ATTACHMENT, start_message))
+    bot.add_handler(MessageHandler((filters.TEXT | filters.PHOTO | filters.VIDEO) & ~filters.COMMAND, start_message))
 
     bot.add_handler(CommandHandler("help", help))
     bot.add_handler(CommandHandler("plan", plan))
