@@ -32,7 +32,7 @@ async def welcome(update: Update, context):
 
 async def reaction(update: Update, context):
     global message_counter
-
+    print(update.message.text)
     if update.message:
         message_counter += 1
         if message_counter % random.randint(75, 150) == 0:

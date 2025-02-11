@@ -13,7 +13,6 @@ def main():
     bot = ApplicationBuilder().token(TOKEN).build()
 
     bot.add_handler(CommandHandler("start", start))
-    bot.add_handler(MessageHandler((filters.TEXT | filters.PHOTO | filters.VIDEO) & ~filters.COMMAND, start_message))
 
     bot.add_handler(CommandHandler("help", help))
     bot.add_handler(CommandHandler("plan", plan))
@@ -33,7 +32,10 @@ def main():
     bot.add_handler(CommandHandler("unban", unban))
 
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
-    bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, reaction))
+    bot.add_handler(
+        MessageHandler(filters.ALL & (filters.ChatType.GROUP | filters.ChatType.SUPERGROUP) & ~filters.COMMAND,
+                       reaction))
+    bot.add_handler(MessageHandler(filters.ALL & filters.ChatType.PRIVATE & ~filters.COMMAND, start_message))
 
     print("Starting Telegram Bot...")
     bot.run_polling(drop_pending_updates=True)
