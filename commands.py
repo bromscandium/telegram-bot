@@ -168,7 +168,7 @@ async def schedule(update: Update, context):
         return
     if update.message:
         await update.message.reply_text(
-            'čítali ste kanál <a href="https://t.me/c/2307996875/4/4463>ASAP</a>?',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/4463">ASAP</a>?',
             parse_mode="HTML"
         )
         await context.bot.forward_message(
@@ -185,11 +185,6 @@ async def invite(update: Update, context):
         return
     if update.message:
         await update.message.reply_text(
-            'čítali ste kanál <a href="https://t.me/c/2307996875/4/52>ASAP</a>?',
+            'https://t.me/+oMLyG94WRD85YWIy"',
             parse_mode="HTML"
-        )
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="https://t.me/+oMLyG94WRD85YWIy",
-            message_thread_id=update.message.message_thread_id
         )
