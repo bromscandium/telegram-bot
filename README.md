@@ -24,6 +24,7 @@ telegram-bot/
 ├── admin.py            # Administrative commands
 ├── interactions.py     # User interaction logic
 ├── chat.py             # Chat handling functions
+├── custom.py             # Custom functions
 └── requirements.txt    # List of required Python libraries
 ```
 

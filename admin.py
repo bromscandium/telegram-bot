@@ -21,16 +21,21 @@ async def is_admin(update: Update) -> bool:
 async def get_user_from_reply(update: Update) -> 'User':
     user = update.message.reply_to_message.from_user
     if user is None:
-        await update.message.reply_text(f'Ledača neexistuje.', parse_mode="HTML")
+        await update.message.reply_text(f'Ledač neexistuje.', parse_mode="HTML")
         return None
     return user
 
 
-async def mute(update: Update, context):
+async def is_possible_to_use(update: Update) -> bool:
     if update.message.chat.id not in ALLOWED_IDS:
-        return
+        return False
     if not await is_admin(update):
-        await update.message.reply_text("Takí ledači ako ty nemôžu používať tento príkaz.")
+        await update.message.reply_text("Ledači ako ty nemôžu používať tento príkaz.")
+        return False
+
+
+async def mute(update: Update, context):
+    if is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -42,8 +47,7 @@ async def mute(update: Update, context):
         duration = 60
 
     until_date = None if duration == 0 else update.message.date + timedelta(seconds=duration)
-    permissions = ChatPermissions(can_send_messages=False)
-    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, permissions=permissions,
+    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, can_send_messages=False,
                                            until_date=until_date)
 
     if duration == 0:
@@ -53,10 +57,7 @@ async def mute(update: Update, context):
 
 
 async def unmute(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-    if not await is_admin(update):
-        await update.message.reply_text("Takí ledači ako ty nemôžu používať tento príkaz.")
+    if is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -67,15 +68,13 @@ async def unmute(update: Update, context):
                                   can_send_audios=True, can_send_documents=True, can_send_polls=True,
                                   can_send_voice_notes=True, can_send_video_notes=True, can_add_web_page_previews=True,
                                   can_send_other_messages=True)
+
     await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, permissions=permissions)
     await update.message.reply_text(f"Ledač {user.full_name} sa zobudil.")
 
 
 async def ban(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-    if not await is_admin(update):
-        await update.message.reply_text("Takí ledači ako ty nemôžu používať tento príkaz.")
+    if is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -87,10 +86,7 @@ async def ban(update: Update, context):
 
 
 async def unban(update: Update, context):
-    if update.message.chat.id not in ALLOWED_IDS:
-        return
-    if not await is_admin(update):
-        await update.message.reply_text("Takí ledači ako ty nemôžu používať tento príkaz.")
+    if is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)

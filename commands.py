@@ -14,7 +14,7 @@ async def help(update: Update, context):
 Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 
 📅 /plan – Rozvrh na rok, aj tak si ho nikto poriadne nepozrie.
-📅 /schedule – Rozvrh na semester, ktory tiez nikto nepozrie.
+🗓️ /schedule – Rozvrh na semester, ktorý si aj tak otvoríš až týždeň pred skúškami.
 📜 /rules – Pravidlá, ktoré si aj tak niektorí myslia, že pre nich neplatia
 🔐 /moodle_passwords – Heslá k Moodle, pre prípad, že si ich zase zabudol.
 🔗 /links – Odkazy na prednášky a cvičenia, ktoré budeš ignorovať až do skúškového.
@@ -22,7 +22,8 @@ Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 🗺 /map_tuke – Mapa TUKE, lebo po troch rokoch stále netrafíš do správnej miestnosti.
 🏛 /map_5p – Mapa 5. poschodia hlavnej budovy, aby si sa tam nestratil ako naposledy.
 📩 /studijne – Informácie o študijnom oddelení, kde aj tak neodpovedajú, keď ich potrebuješ.
-📩 /invite – Neverím, že máš priateľov, ale môžeš ich pozvať.
+🔗 /invite – Neverím, že máš priateľov, ale môžeš ich pozvať.
+⭐ /bless – Výhody boosterov, lebo aj tak si si boost kúpil len omylom.
 
 Ak ešte stále máš otázky, možno je problém inde.''',
             parse_mode="HTML"
@@ -71,10 +72,11 @@ async def links(update: Update, context):
             'čítali ste kanál <a href="https://t.me/c/2307996875/4/57">ASAP</a>?',
             parse_mode="HTML"
         )
-        await context.bot.send_message(
+        await context.bot.forward_message(
             chat_id=update.effective_chat.id,
-            text="Je tam príliš veľa textu, môžete si na tlačidlo kliknúť aj samostatne!",
-            message_thread_id=update.message.message_thread_id
+            from_chat_id=CHAT_ID,
+            message_id=57,
+            message_thread_id=update.message.message_thread_id,
         )
 
 
@@ -163,6 +165,16 @@ async def studijne(update: Update, context):
 
 
 @limit_usage
+async def dfhjbsdhjbfjdsbfsjkhfbsjhfsd(update: Update, context):
+    await context.bot.copy_message(
+        chat_id=update.effective_chat.id,
+        from_chat_id=CHAT_ID,
+        message_id=13729,
+        message_thread_id=update.message.message_thread_id
+    )
+
+
+@limit_usage
 async def schedule(update: Update, context):
     if update.message.chat.id not in ALLOWED_IDS:
         return
@@ -185,6 +197,6 @@ async def invite(update: Update, context):
         return
     if update.message:
         await update.message.reply_text(
-            'https://t.me/+oMLyG94WRD85YWIy"',
+            'https://t.me/+oMLyG94WRD85YWIy',
             parse_mode="HTML"
         )

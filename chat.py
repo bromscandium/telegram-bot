@@ -1,15 +1,14 @@
 from telegram import Update
-
 from config import ADMIN_CHAT_ID
 
 user_state = {}
 
 
-async def start(update: Update, context):
+async def start(update: Update):
     if update.message.chat.type == 'private':
         user_id = update.message.from_user.id
         user_state[user_id] = 'waiting_for_message'
-        await update.message.reply_text("Напишіть ваше повідомлення, і я відправлю його в адміністраторам")
+        await update.message.reply_text("Napíšte svoju správu a ja ju pošlem administrátorom.")
 
 
 async def start_message(update: Update, context):
@@ -19,6 +18,6 @@ async def start_message(update: Update, context):
         await context.bot.send_message(chat_id=ADMIN_CHAT_ID,
                                        text=f"\n\n#надіслали_в_бота\n<blockquote>id{update.message.from_user.id}\n@{update.message.from_user.username}\n{update.message.from_user.full_name}</blockquote>",
                                        parse_mode="HTML")
-        await update.message.reply_text("Ваше повідомлення було надіслано в групу.")
+        await update.message.reply_text("Vaša správa bola odoslaná do skupiny.")
 
         user_state[update.message.from_user.id] = 'message_sent'
