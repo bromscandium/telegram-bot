@@ -47,7 +47,8 @@ async def mute(update: Update, context):
         duration = 60
 
     until_date = None if duration == 0 else update.message.date + timedelta(seconds=duration)
-    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, can_send_messages=False,
+    restriction = ChatPermissions(can_send_messages=False)
+    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, permissions=restriction,
                                            until_date=until_date)
 
     if duration == 0:

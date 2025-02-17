@@ -53,7 +53,7 @@ async def bless(update: Update, context):
     chat_admins = await context.bot.get_chat_administrators(chat_id=CHAT_ID)
     user_is_admin = any(admin.user.id == update.message.from_user.id for admin in chat_admins)
     if not user_is_admin:
-        result = await context.bot.promote_chat_member(
+        await context.bot.promote_chat_member(
             chat_id=CHAT_ID,
             user_id=update.message.from_user.id,
             can_change_info=False,
@@ -72,7 +72,6 @@ async def bless(update: Update, context):
             can_edit_stories=False,
             can_delete_stories=False
         )
-        print(result)
 
     if len(update.message.text.split()) < 2:
         await update.message.reply_text(
