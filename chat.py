@@ -4,7 +4,7 @@ from config import ADMIN_CHAT_ID
 user_state = {}
 
 
-async def start(update: Update):
+async def start(update: Update, context):
     if update.message.chat.type == 'private':
         user_id = update.message.from_user.id
         user_state[user_id] = 'waiting_for_message'
