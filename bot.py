@@ -31,6 +31,8 @@ def main():
     bot.add_handler(CommandHandler("mute", mute))
     bot.add_handler(CommandHandler("unmute", unmute))
     bot.add_handler(CommandHandler("unban", unban))
+    bot.add_handler(CommandHandler("change", change))
+    bot.add_handler(CommandHandler("todolist", todolist))
 
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
     bot.add_handler(

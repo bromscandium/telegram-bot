@@ -1,6 +1,9 @@
+import re
 from datetime import timedelta
 from telegram import Update, ChatPermissions
 from config import ALLOWED_IDS
+
+CONFIG_FILE = "config.py"
 
 
 async def is_admin(update: Update) -> bool:
@@ -29,13 +32,14 @@ async def get_user_from_reply(update: Update) -> 'User':
 async def is_possible_to_use(update: Update) -> bool:
     if update.message.chat.id not in ALLOWED_IDS:
         return False
+
     if not await is_admin(update):
         await update.message.reply_text("Ledači ako ty nemôžu používať tento príkaz.")
         return False
 
 
 async def mute(update: Update, context):
-    if is_possible_to_use(update) is False:
+    if await is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -58,7 +62,7 @@ async def mute(update: Update, context):
 
 
 async def unmute(update: Update, context):
-    if is_possible_to_use(update) is False:
+    if await is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -75,7 +79,7 @@ async def unmute(update: Update, context):
 
 
 async def ban(update: Update, context):
-    if is_possible_to_use(update) is False:
+    if await is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -87,7 +91,7 @@ async def ban(update: Update, context):
 
 
 async def unban(update: Update, context):
-    if is_possible_to_use(update) is False:
+    if await is_possible_to_use(update) is False:
         return
 
     user = await get_user_from_reply(update)
@@ -96,3 +100,18 @@ async def unban(update: Update, context):
 
     await context.bot.unban_chat_member(chat_id=update.effective_chat.id, user_id=user.id)
     await update.message.reply_text(f"Ledač {user.full_name} sa môže zobudiť.")
+
+
+async def change(update: Update, context):
+    if await is_possible_to_use(update) is False:
+        return
+
+    new_id = update.message.reply_to_message.message_id
+
+    with open(CONFIG_FILE, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    updated_content = re.sub(r"^TODOLIST_ID\s*=\s*\d+", f"TODOLIST_ID = {new_id}", content, flags=re.MULTILINE)
+
+    with open(CONFIG_FILE, "w", encoding="utf-8") as file:
+        file.write(updated_content)
