@@ -5,3 +5,4 @@ ALLOWED_IDS = [your_group_id, your_admin_id]
 REACTIONS = ["🔥", "👍", "🤮", "😢", "🤡", "😁", "🍌", "👎"]
 MAX_USAGE = 2
 RESET_TIME_SECONDS = 300
+TODOLIST_ID = 0
