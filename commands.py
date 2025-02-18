@@ -1,4 +1,8 @@
+import importlib
+
 from telegram import Update
+
+import config
 from config import CHAT_ID, ALLOWED_IDS
 from interactions import limit_usage
 
@@ -23,6 +27,7 @@ Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 🏛 /map_5p – Mapa 5. poschodia hlavnej budovy, aby si sa tam nestratil ako naposledy.
 📩 /studijne – Informácie o študijnom oddelení, kde aj tak neodpovedajú, keď ich potrebuješ.
 🔗 /invite – Neverím, že máš priateľov, ale môžeš ich pozvať.
+📃 /todolist – Zoznam úloh, ktoré si aj tak nesplníš načas
 ⭐ /bless – Výhody boosterov, lebo aj tak si si boost kúpil len omylom.
 
 Ak ešte stále máš otázky, možno je problém inde.''',
@@ -199,4 +204,21 @@ async def invite(update: Update, context):
         await update.message.reply_text(
             'https://t.me/+oMLyG94WRD85YWIy',
             parse_mode="HTML"
+        )
+
+
+@limit_usage
+async def todolist(update: Update, context):
+    if update.message.chat.id not in ALLOWED_IDS:
+        return
+    with (open("config.py", "r", encoding="utf-8") as file):
+        for line in file:
+            if line.startswith("TODOLIST_ID"):
+                todolist_id = int(line.split("=")[1].strip())
+    if update.message:
+        await context.bot.forward_message(
+            chat_id=update.effective_chat.id,
+            from_chat_id=CHAT_ID,
+            message_id=todolist_id,
+            message_thread_id=update.message.message_thread_id
         )
