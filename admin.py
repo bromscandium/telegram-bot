@@ -1,7 +1,7 @@
 import re
 from datetime import timedelta
 from telegram import Update, ChatPermissions
-from config import ALLOWED_IDS
+from config import ALLOWED_IDS, ADMINS_ID
 
 CONFIG_FILE = "config.py"
 
@@ -9,7 +9,7 @@ CONFIG_FILE = "config.py"
 async def is_admin(update: Update) -> bool:
     chat_member = await update.effective_chat.get_member(update.effective_user.id)
 
-    if chat_member.status not in ['administrator', 'owner']:
+    if chat_member.status not in ['administrator', 'creator']:
         return False
 
     admins = await update.effective_chat.get_administrators()
@@ -44,6 +44,10 @@ async def mute(update: Update, context):
 
     user = await get_user_from_reply(update)
     if user is None:
+        return
+
+    if user.id in ADMINS_ID:
+        await update.message.reply_text(f"{user.full_name} je administrátor, nemôže byť umlčaný.")
         return
 
     duration = int(context.args[0]) if len(context.args) > 0 else 0
@@ -84,6 +88,10 @@ async def ban(update: Update, context):
 
     user = await get_user_from_reply(update)
     if user is None:
+        return
+
+    if user.id in ADMINS_ID:
+        await update.message.reply_text(f"{user.full_name} je administrátor, nemôže byť umlčaný.")
         return
 
     await context.bot.ban_chat_member(chat_id=update.effective_chat.id, user_id=user.id)

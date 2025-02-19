@@ -1,11 +1,14 @@
-from telegram import Update
+from datetime import timedelta
 
+from telegram import Update, ChatPermissions
 from admin import get_user_from_reply, is_possible_to_use
-from config import CHAT_ID, ALLOWED_IDS
+from config import CHAT_ID, ALLOWED_IDS, ADMINS_ID
 
 
 async def grant(update: Update, context):
-    await is_possible_to_use(update)
+    if await is_possible_to_use(update) is False:
+        return
+
     user = await get_user_from_reply(update)
     if user is None:
         return
@@ -14,7 +17,7 @@ async def grant(update: Update, context):
         chat_id=CHAT_ID,
         user_id=user.id,
         can_post_messages=True,
-        can_manage_chat=True,
+        can_manage_chat=True
     )
 
     if len(update.message.text.split()) < 2:
@@ -43,7 +46,7 @@ async def bless(update: Update, context):
         return
 
     boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
-    if boosts == 0:
+    if (not boosts.boosts) is True:
         await update.message.reply_text(
             'Ste taky ledačy, že nemožete používať tento príkaz. Povoleny len pre boosterov!',
             parse_mode="HTML"
@@ -56,21 +59,8 @@ async def bless(update: Update, context):
         await context.bot.promote_chat_member(
             chat_id=CHAT_ID,
             user_id=update.message.from_user.id,
-            can_change_info=False,
             can_post_messages=True,
-            can_edit_messages=False,
-            can_delete_messages=False,
-            can_invite_users=False,
-            can_restrict_members=False,
-            can_pin_messages=False,
-            can_promote_members=False,
-            is_anonymous=False,
-            can_manage_chat=True,
-            can_manage_video_chats=False,
-            can_manage_topics=False,
-            can_post_stories=False,
-            can_edit_stories=False,
-            can_delete_stories=False
+            can_manage_chat=True
         )
 
     if len(update.message.text.split()) < 2:
@@ -92,3 +82,19 @@ async def bless(update: Update, context):
         f'Tvoj novy titul: {new_title}',
         parse_mode="HTML"
     )
+
+
+async def meme(update: Update, context):
+    if update.message.chat.id not in ALLOWED_IDS:
+        return False
+    if update.message.from_user.id in ADMINS_ID:
+        await update.message.reply_text(f"Nepovedam ti nič.")
+        return
+
+    until_date = update.message.date + timedelta(seconds=180)
+    restriction = ChatPermissions(can_send_messages=False)
+    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=update.message.from_user.id,
+                                           permissions=restriction,
+                                           until_date=until_date)
+
+    await update.message.reply_text(f"Ledač {update.message.from_user.full_name} zaspal na 180 sekúnd.")

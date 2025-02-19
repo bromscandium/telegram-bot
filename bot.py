@@ -4,7 +4,7 @@ from commands import *
 from admin import *
 from interactions import welcome, reaction
 from chat import start, start_message
-from custom import bless, grant
+from custom import bless, grant, meme
 
 from config import TOKEN
 
@@ -42,7 +42,7 @@ def main():
 
     bot.add_handler(CommandHandler("bless", bless))
     bot.add_handler(CommandHandler("grant", grant))
-    bot.add_handler(CommandHandler("meme", grant))
+    bot.add_handler(CommandHandler("meme", meme))
 
     print("Starting Telegram Bot...")
     bot.run_polling(drop_pending_updates=True)
