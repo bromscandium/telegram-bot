@@ -6,3 +6,4 @@ REACTIONS = ["🔥", "👍", "🤮", "😢", "🤡", "😁", "🍌", "👎"]
 MAX_USAGE = 2
 RESET_TIME_SECONDS = 300
 TODOLIST_ID = 0
+ADMINS_ID = [your_admin_id]
