@@ -9,14 +9,17 @@ CONFIG_FILE = "config.py"
 async def is_admin(update: Update) -> bool:
     chat_member = await update.effective_chat.get_member(update.effective_user.id)
 
-    if chat_member.status not in ['administrator', 'creator']:
+    if chat_member.status == 'creator':
+        return True
+    if chat_member.status not in ['administrator', 'owner', 'creator']:
         return False
+
 
     admins = await update.effective_chat.get_administrators()
 
     for admin in admins:
         if admin.user.id == update.effective_user.id:
-            return admin.can_restrict_members
+            return True
 
     return False
 

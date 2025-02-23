@@ -26,6 +26,7 @@ def main():
     bot.add_handler(CommandHandler("schedule", schedule))
     bot.add_handler(CommandHandler("studijne", studijne))
     bot.add_handler(CommandHandler("invite", invite))
+    bot.add_handler(CommandHandler("week", week))
 
     bot.add_handler(CommandHandler("ban", ban))
     bot.add_handler(CommandHandler("mute", mute))

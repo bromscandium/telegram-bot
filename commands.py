@@ -1,10 +1,9 @@
-import importlib
-
 from telegram import Update
-
-import config
+from datetime import datetime, timedelta
 from config import CHAT_ID, ALLOWED_IDS
 from interactions import limit_usage
+
+SEMESTER_START = datetime(2025, 2, 10)
 
 
 @limit_usage
@@ -29,6 +28,7 @@ Ak už si sa rozhodol otravovať bota, aspoň si vyber správny príkaz:
 🔗 /invite – Neverím, že máš priateľov, ale môžeš ich pozvať.
 📃 /todolist – Zoznam úloh, ktoré si aj tak nesplníš načas
 ⭐ /bless – Výhody boosterov, lebo aj tak si si boost kúpil len omylom.
+👀 /week – Počet týždňov, čo si premárnil, a koľko ti ostáva na zúfalstvo.
 
 Ak ešte stále máš otázky, možno je problém inde.''',
             parse_mode="HTML"
@@ -222,3 +222,20 @@ async def todolist(update: Update, context):
             message_id=todolist_id,
             message_thread_id=update.message.message_thread_id
         )
+
+
+@limit_usage
+async def week(update: Update, context):
+    now = datetime.now()
+    now = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    current_week = round((now - SEMESTER_START).days / 7)
+    if now.weekday() not in [0, 5, 6]:
+        current_week += 1
+
+    if now >= SEMESTER_START:
+        message = f"Sme v {current_week}. týždni semestra."
+    else:
+        message = f"Uvidíme sa {SEMESTER_START.strftime('%d.%m.%Y')}!"
+
+    await update.message.reply_text(message)
