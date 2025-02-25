@@ -1,6 +1,7 @@
 import re
-from datetime import timedelta
+
 from telegram import Update, ChatPermissions
+
 from config import ALLOWED_IDS, ADMINS_ID
 
 CONFIG_FILE = "config.py"
@@ -13,7 +14,6 @@ async def is_admin(update: Update) -> bool:
         return True
     if chat_member.status not in ['administrator', 'owner', 'creator']:
         return False
-
 
     admins = await update.effective_chat.get_administrators()
 

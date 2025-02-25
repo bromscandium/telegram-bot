@@ -2,6 +2,7 @@ from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, fil
 
 from commands import *
 from admin import *
+from warn import warn, unwarn, list_warn
 from interactions import welcome, reaction
 from chat import start, start_message
 from custom import bless, grant, meme
@@ -34,6 +35,9 @@ def main():
     bot.add_handler(CommandHandler("unban", unban))
     bot.add_handler(CommandHandler("change", change))
     bot.add_handler(CommandHandler("todolist", todolist))
+    bot.add_handler(CommandHandler("warn", warn))
+    bot.add_handler(CommandHandler("unwarn", unwarn))
+    bot.add_handler(CommandHandler("list_warn", list_warn))
 
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
     bot.add_handler(
