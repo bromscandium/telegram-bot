@@ -25,6 +25,8 @@ telegram-bot/
 ├── interactions.py     # User interaction logic
 ├── chat.py             # Chat handling functions
 ├── custom.py           # Custom functions
+├── warn.py             # Warning system with SQL
+├── warnings.db         # Database for warnings
 └── requirements.txt    # List of required Python libraries
 ```
 
