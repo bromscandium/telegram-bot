@@ -4,6 +4,7 @@ from telegram import Update, ChatPermissions
 from telegram.ext import CallbackContext
 
 from admin import is_possible_to_use, get_user_from_reply
+from config import ADMINS_ID
 
 
 def create_db():
@@ -55,7 +56,7 @@ def get_warning_count(user_id):
 def get_warning_reasons(user_id):
     conn = sqlite3.connect('warnings.db')
     c = conn.cursor()
-    c.execute("SELECT reason FROM warnings WHERE user_id = ?", (user_id,))
+    c.execute("SELECT reasons FROM warnings WHERE user_id = ?", (user_id,))
     result = c.fetchone()
     conn.close()
 
@@ -82,7 +83,7 @@ async def list_warn(update: Update, context):
     warnings_count = get_warning_count(user.id)
     reasons = get_warning_reasons(user.id)
 
-    if reasons is None:
+    if reasons is "—":
         await update.message.reply_text("Tento ledač nemá žiadne varovania.")
     else:
         await update.message.reply_text(
@@ -95,6 +96,9 @@ async def warn(update: Update, context: CallbackContext):
         return
     user = await get_user_from_reply(update)
     if user is None:
+        return
+    if user.id in ADMINS_ID:
+        await update.message.reply_text(f"{user.full_name} je administrátor, nemôže byť umlčaný.")
         return
 
     reason = ' '.join(context.args) if context.args else 'Bez dôvodu'
