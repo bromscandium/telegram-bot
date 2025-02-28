@@ -3,7 +3,8 @@
 ## Overview
 
 This project is a Telegram bot written in Python. It is designed to handle various user interactions, process commands,
-and provide an administrative panel for managing features. The bot is modular, making it easy to extend and maintain.
+and provide an administrative panel for managing features. The bot is modular, making it easy to extend and maintain. The bot is maken
+for local usage, then if you want to use servers for keeping and processing data, you should customize it.
 
 ## Features
 
