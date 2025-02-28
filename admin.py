@@ -1,5 +1,5 @@
 import re
-
+from datetime import timedelta
 from telegram import Update, ChatPermissions
 
 from config import ALLOWED_IDS, ADMINS_ID
