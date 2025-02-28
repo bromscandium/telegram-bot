@@ -83,7 +83,7 @@ async def list_warn(update: Update, context):
     warnings_count = get_warning_count(user.id)
     reasons = get_warning_reasons(user.id)
 
-    if reasons is "—":
+    if reasons == "—":
         await update.message.reply_text("Tento ledač nemá žiadne varovania.")
     else:
         await update.message.reply_text(
