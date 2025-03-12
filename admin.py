@@ -9,7 +9,7 @@ from config import ADMINS_ID, CHAT_ID, DATABASE
 # Checking function
 
 async def is_possible(update) -> bool:
-    if update.message.from_user not in ADMINS_ID:
+    if update.message.from_user.id not in ADMINS_ID:
         await update.message.reply_text("Ledači ako ty nemôžu používať tento príkaz.")
         return False
 
