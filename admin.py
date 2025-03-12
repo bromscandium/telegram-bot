@@ -94,7 +94,7 @@ def reset_warnings(user_id):
 # Basic admin functions
 
 async def mute(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -110,7 +110,7 @@ async def mute(update: Update, context):
 
 
 async def unmute(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -121,7 +121,7 @@ async def unmute(update: Update, context):
 
 
 async def ban(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -131,7 +131,7 @@ async def ban(update: Update, context):
 
 
 async def unban(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -141,7 +141,7 @@ async def unban(update: Update, context):
 
 
 async def grant(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -171,7 +171,7 @@ async def grant(update: Update, context):
 # Warning admin functions
 
 async def listwarn(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -186,7 +186,7 @@ async def listwarn(update: Update, context):
 
 
 async def warn(update: Update, context: CallbackContext):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -213,7 +213,7 @@ async def warn(update: Update, context: CallbackContext):
 
 
 async def unwarn(update: Update, context):
-    if is_possible(update) is False:
+    if await is_possible(update) is False:
         return
 
     user = update.message.reply_to_message.from_user
@@ -223,6 +223,8 @@ async def unwarn(update: Update, context):
     await update.message.reply_text(f"Všetky varovania boli vymazané z ledača {user.full_name}.")
 
 async def resetwarn(update: Update, context):
+    if await is_possible(update) is False:
+        return
     conn = psycopg2.connect(DATABASE, sslmode="require")
     c = conn.cursor()
     c.execute("UPDATE warnings SET warnings = 0")
