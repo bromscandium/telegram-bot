@@ -1,9 +1,14 @@
-TOKEN = 'your_token'
-CHAT_ID = 'your_group_id'
-ADMIN_CHAT_ID = 'your_admin_id'
-ALLOWED_IDS = [your_group_id, your_admin_id]
+# Import
+from datetime import datetime
+
+# Important setup
+TOKEN = 'SET_HERE_TG_TOKEN'
+CHAT_ID = 'SET_HERE_YOUR_MAIN_CHAT'
+ADMIN_CHAT_ID = 'SET_HERE_YOUR_ADMIN_CHAT'
+ADMINS_ID = [PUT HERE ALL ADMINS ID]
+DATABASE = "SET_HERE_LINK_TO_YOUR_DATABASE_IF_YOU_USE_RAILWAY_SERVICE"
+
+# Additional setup
 REACTIONS = ["🔥", "👍", "🤮", "😢", "🤡", "😁", "🍌", "👎"]
-MAX_USAGE = 2
-RESET_TIME_SECONDS = 300
-TODOLIST_ID = 0
-ADMINS_ID = [your_admin_id]
+SEMESTER_START = datetime(2025, 2, 10)
+LINK = 'SET_HERE_HERE_LINK_TO_YOUR_CHAT'

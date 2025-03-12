@@ -1,128 +1,231 @@
-import re
-
+import psycopg2
 from telegram import Update, ChatPermissions
+from telegram.ext import CallbackContext
+from datetime import timedelta, datetime
 
-from config import ALLOWED_IDS, ADMINS_ID
-
-CONFIG_FILE = "config.py"
-
-
-async def is_admin(update: Update) -> bool:
-    chat_member = await update.effective_chat.get_member(update.effective_user.id)
-
-    if chat_member.status == 'creator':
-        return True
-    if chat_member.status not in ['administrator', 'owner', 'creator']:
-        return False
-
-    admins = await update.effective_chat.get_administrators()
-
-    for admin in admins:
-        if admin.user.id == update.effective_user.id:
-            return True
-
-    return False
+from config import ADMINS_ID, CHAT_ID, DATABASE
 
 
-async def get_user_from_reply(update: Update) -> 'User':
-    user = update.message.reply_to_message.from_user
-    if user is None:
-        await update.message.reply_text(f'Ledač neexistuje.', parse_mode="HTML")
-        return None
-    return user
+# Checking function
 
-
-async def is_possible_to_use(update: Update) -> bool:
-    if update.message.chat.id not in ALLOWED_IDS:
-        return False
-
-    if not await is_admin(update):
+async def is_possible(update) -> bool:
+    if update.message.from_user not in ADMINS_ID:
         await update.message.reply_text("Ledači ako ty nemôžu používať tento príkaz.")
         return False
 
-
-async def mute(update: Update, context):
-    if await is_possible_to_use(update) is False:
-        return
-
-    user = await get_user_from_reply(update)
+    user = update.message.reply_to_message.from_user
     if user is None:
-        return
+        await update.message.reply_text(f'Ledač neexistuje.')
+        return False
 
     if user.id in ADMINS_ID:
         await update.message.reply_text(f"{user.full_name} je administrátor, nemôže byť umlčaný.")
+        return False
+
+
+# Database functions
+
+def create_db():
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS warnings (
+                    user_id BIGINT PRIMARY KEY,
+                    warnings INTEGER DEFAULT 0,
+                    reasons TEXT)''')
+    conn.commit()
+    conn.close()
+
+
+def add_warning(user_id, reason):
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+
+    c.execute("SELECT warnings, reasons FROM warnings WHERE user_id = %s", (user_id,))
+    result = c.fetchone()
+
+    timestamp = datetime.now().strftime("%d.%m %H:%M")
+    formatted_reason = f"{timestamp} {reason}"
+
+    if result:
+        warnings_count, reasons = result
+        new_warning_count = warnings_count + 1
+        updated_reasons = reasons + f"\n{formatted_reason}" if reasons else formatted_reason
+
+        c.execute("UPDATE warnings SET warnings = %s, reasons = %s WHERE user_id = %s",
+                  (new_warning_count, updated_reasons, user_id))
+    else:
+        c.execute("INSERT INTO warnings (user_id, warnings, reasons) VALUES (%s, %s, %s)",
+                  (user_id, 1, formatted_reason))
+
+    conn.commit()
+    conn.close()
+
+
+def get_warning_count(user_id):
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+    c.execute("SELECT warnings FROM warnings WHERE user_id = %s", (user_id,))
+    result = c.fetchone()
+    conn.close()
+
+    return result[0] if result else 0
+
+
+def get_warning_reasons(user_id):
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+    c.execute("SELECT reasons FROM warnings WHERE user_id = %s", (user_id,))
+    result = c.fetchone()
+    conn.close()
+
+    if result and result[0]:
+        return result[0]
+    return "—"
+
+
+def reset_warnings(user_id):
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+    c.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
+    conn.commit()
+    conn.close()
+
+
+# Basic admin functions
+
+async def mute(update: Update, context):
+    if is_possible(update) is False:
         return
 
+    user = update.message.reply_to_message.from_user
     duration = int(context.args[0]) if len(context.args) > 0 else 0
-    if 59 > duration > 1:
+    if duration < 59:
         duration = 60
-
     until_date = None if duration == 0 else update.message.date + timedelta(seconds=duration)
-    restriction = ChatPermissions(can_send_messages=False)
-    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, permissions=restriction,
-                                           until_date=until_date)
 
-    if duration == 0:
-        await update.message.reply_text(f"Ledač {user.full_name} zaspal.")
-    else:
-        await update.message.reply_text(f"Ledač {user.full_name} bude spať {duration} sekúnd.")
+    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id,
+                                           permissions=ChatPermissions.no_permissions(),
+                                           until_date=until_date)
+    await update.message.reply_text(f"Ledač {user.full_name} zaspal.")
 
 
 async def unmute(update: Update, context):
-    if await is_possible_to_use(update) is False:
+    if is_possible(update) is False:
         return
 
-    user = await get_user_from_reply(update)
-    if user is None:
-        return
+    user = update.message.reply_to_message.from_user
 
-    permissions = ChatPermissions(can_send_messages=True, can_send_videos=True, can_send_photos=True,
-                                  can_send_audios=True, can_send_documents=True, can_send_polls=True,
-                                  can_send_voice_notes=True, can_send_video_notes=True, can_add_web_page_previews=True,
-                                  can_send_other_messages=True)
-
-    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id, permissions=permissions)
+    await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id,
+                                           permissions=ChatPermissions.all_permissions())
     await update.message.reply_text(f"Ledač {user.full_name} sa zobudil.")
 
 
 async def ban(update: Update, context):
-    if await is_possible_to_use(update) is False:
+    if is_possible(update) is False:
         return
 
-    user = await get_user_from_reply(update)
-    if user is None:
-        return
-
-    if user.id in ADMINS_ID:
-        await update.message.reply_text(f"{user.full_name} je administrátor, nemôže byť umlčaný.")
-        return
+    user = update.message.reply_to_message.from_user
 
     await context.bot.ban_chat_member(chat_id=update.effective_chat.id, user_id=user.id)
     await update.message.reply_text(f"Ledač {user.full_name} zaspal navždy.")
 
 
 async def unban(update: Update, context):
-    if await is_possible_to_use(update) is False:
+    if is_possible(update) is False:
         return
 
-    user = await get_user_from_reply(update)
-    if user is None:
-        return
+    user = update.message.reply_to_message.from_user
 
     await context.bot.unban_chat_member(chat_id=update.effective_chat.id, user_id=user.id)
     await update.message.reply_text(f"Ledač {user.full_name} sa môže zobudiť.")
 
 
-async def change(update: Update, context):
-    if await is_possible_to_use(update) is False:
+async def grant(update: Update, context):
+    if is_possible(update) is False:
         return
 
-    new_id = update.message.reply_to_message.message_id
+    user = update.message.reply_to_message.from_user
 
-    with open(CONFIG_FILE, "r", encoding="utf-8") as file:
-        content = file.read()
+    await context.bot.promote_chat_member(
+        chat_id=CHAT_ID,
+        user_id=user.id,
+        can_post_messages=True,
+        can_manage_chat=True
+    )
 
-    updated_content = re.sub(r"^TODOLIST_ID\s*=\s*\d+", f"TODOLIST_ID = {new_id}", content, flags=re.MULTILINE)
+    if len(update.message.text.split()) < 2:
+        await update.message.reply_text('Prosim, napiste v tomto formate: /grant userTitul.')
+        return
 
-    with open(CONFIG_FILE, "w", encoding="utf-8") as file:
-        file.write(updated_content)
+    new_title = " ".join(update.message.text.split()[1:])
+
+    await context.bot.set_chat_administrator_custom_title(
+        chat_id=CHAT_ID,
+        user_id=user.id,
+        custom_title=new_title
+    )
+
+    await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
+
+
+# Warning admin functions
+
+async def listwarn(update: Update, context):
+    if is_possible(update) is False:
+        return
+
+    user = update.message.reply_to_message.from_user
+
+    warnings_count = get_warning_count(user.id)
+    reasons = get_warning_reasons(user.id)
+
+    if reasons == "—":
+        await update.message.reply_text("Tento ledač nemá žiadne varovania.")
+    else:
+        await update.message.reply_text(f"{user.full_name} má {warnings_count} varovania:\n\n{reasons}")
+
+
+async def warn(update: Update, context: CallbackContext):
+    if is_possible(update) is False:
+        return
+
+    user = update.message.reply_to_message.from_user
+
+    reason = ' '.join(context.args) if context.args else 'Bez dôvodu'
+
+    add_warning(user.id, reason)
+
+    warnings_count = get_warning_count(user.id)
+
+    if warnings_count >= 3:
+        until_date = update.message.date + timedelta(days=2)
+        await context.bot.restrict_chat_member(chat_id=update.effective_chat.id, user_id=user.id,
+                                               permissions=ChatPermissions.no_permissions(), until_date=until_date)
+        reset_warnings(user.id)
+
+        await update.message.reply_text(
+            f"{user.full_name} dostal {warnings_count} varovaní a bude spat 2 hodiny."
+        )
+    else:
+        await update.message.reply_text(
+            f"{user.full_name} dostal varovanie. Teraz má {warnings_count}."
+        )
+
+
+async def unwarn(update: Update, context):
+    if is_possible(update) is False:
+        return
+
+    user = update.message.reply_to_message.from_user
+
+    reset_warnings(user.id)
+
+    await update.message.reply_text(f"Všetky varovania boli vymazané z ledača {user.full_name}.")
+
+async def resetwarn(update: Update, context):
+    conn = psycopg2.connect(DATABASE, sslmode="require")
+    c = conn.cursor()
+    c.execute("UPDATE warnings SET warnings = 0")
+    conn.commit()
+    await context.bot.send_message(chat_id=CHAT_ID, text="Všetky varovania boli automaticky resetované!")
+    conn.close()
