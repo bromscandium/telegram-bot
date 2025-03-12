@@ -1,73 +1,87 @@
-# Telegram Bot Project
+# Telegram Bot
 
 ## Overview
 
-This project is a Telegram bot written in Python. It is designed to handle various user interactions, process commands,
-and provide an administrative panel for managing features. The bot is modular, making it easy to extend and maintain. The bot is maken
-for local usage, then if you want to use servers for keeping and processing data, you should customize it.
+This is a **modular Telegram bot** built in Python, designed to handle various user interactions and commands. It includes an **administrative panel** for managing bot features and is optimized for **local use**. If you wish to run it on a server for persistent storage and processing, you can easily customize the backend.
+
+---
 
 ## Features
 
-- Command handling for user interactions.
-- Admin panel for bot management.
-- Modular structure with separate files for commands, admin functions, and interactions.
-- Configuration management via `config.py`.
-- Dependency management with `requirements.txt`.
+- **User Command Handling** — Structured and expandable command system.
+- **Admin Panel** — Manage users, settings, and features.
+- **Modular Architecture** — Organized codebase for easy maintenance and scaling.
+- **Configurable via `config.py`** — Centralized configuration management.
+
+---
 
 ## File Structure
 
 ```
 telegram-bot/
-├── README.md           # Project documentation
-├── bot.py              # Main script to start the bot
-├── config.py           # Configuration file (API keys, settings)
-├── commands.py         # Command processing logic
-├── admin.py            # Administrative commands
+├── .idea               # IDE folder
+├── .gitignore          # List of ignored files
+├── admin.py            # Admin-specific functionalities
+├── bot.py              # Main entry point of the bot
+├── chat.py             # Chat processing functions
+├── commands.py         # User command handling
+├── config.py           # Bot configuration file
 ├── interactions.py     # User interaction logic
-├── chat.py             # Chat handling functions
-├── custom.py           # Custom functions
-├── warn.py             # Warning system with SQL
-├── warnings.db         # Database for warnings
-└── requirements.txt    # List of required Python libraries
+├── LICENCE             # Licence for this repository
+├── README.md           # Project documentation
+└── requirements.txt    # List of Python dependencies
 ```
+
+---
 
 ## Installation & Setup
 
-### 1️⃣ Clone the repository
+### 1⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/telegram-bot.git
+git clone https://github.com/bromscandium/telegram-bot
 cd telegram-bot
 ```
 
-### 2️⃣ Install dependencies
+### 2⃣ Install Dependencies
+
+Ensure you have Python 3.x installed. Then install required libraries:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Configuration
+### 3⃣ Configure the Bot
 
-Modify the `config.py` file to add your Telegram bot API token and any other necessary settings.
+Open `config.py` and add your **Telegram Bot API Token** along with other configuration parameters:
 
-### 4️⃣ Run the bot
+```python
+API_TOKEN = 'YOUR_API_TOKEN_HERE'
+# Other settings...
+```
+
+### 4⃣ Run the Bot
 
 ```bash
 python bot.py
 ```
 
-## How to Run
-
-After setting up and configuring the bot, simply execute the following command to start it:
-
-```bash
-python bot.py
-```
+---
 
 ## Dependencies
 
-The project requires the following:
+- **Python 3.x**
+- **pip** (Python package manager)
+- All required libraries listed in `requirements.txt`
 
-- Python 3.x
-- `pip` package manager
-- Required Python libraries (listed in `requirements.txt`)
+---
+
+## License
+
+This project is open-source. Feel free to use, modify, and distribute it under the terms provided (if applicable).
+
+---
+
+## Contact
+
+For any questions or suggestions, feel free to open an issue or contact the maintainer.
