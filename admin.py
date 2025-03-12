@@ -204,7 +204,7 @@ async def warn(update: Update, context: CallbackContext):
         reset_warnings(user.id)
 
         await update.message.reply_text(
-            f"{user.full_name} dostal {warnings_count} varovaní a bude spat 2 hodiny."
+            f"{user.full_name} dostal {warnings_count} varovaní a bude spat 2 dni."
         )
     else:
         await update.message.reply_text(
