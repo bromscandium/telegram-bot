@@ -36,7 +36,7 @@ async def is_possible(update, required_permission: str) -> bool:
 # Database functions
 
 def create_db():
-    c.execute('''CREATE TABLE IF NOT EXISTS warnings (
+    cursor.execute('''CREATE TABLE IF NOT EXISTS warnings (
                     user_id BIGINT PRIMARY KEY,
                     warnings INTEGER DEFAULT 0,
                     reasons TEXT)''')
@@ -44,8 +44,8 @@ def create_db():
 
 
 def add_warning(user_id, reason):
-    c.execute("SELECT warnings, reasons FROM warnings WHERE user_id = %s", (user_id,))
-    result = c.fetchone()
+    cursor.execute("SELECT warnings, reasons FROM warnings WHERE user_id = %s", (user_id,))
+    result = cursor.fetchone()
 
     timestamp = datetime.now().strftime("%d.%m %H:%M")
     formatted_reason = f"{timestamp} {reason}"
@@ -55,25 +55,25 @@ def add_warning(user_id, reason):
         new_warning_count = warnings_count + 1
         updated_reasons = reasons + f"\n{formatted_reason}" if reasons else formatted_reason
 
-        c.execute("UPDATE warnings SET warnings = %s, reasons = %s WHERE user_id = %s",
-                  (new_warning_count, updated_reasons, user_id))
+        cursor.execute("UPDATE warnings SET warnings = %s, reasons = %s WHERE user_id = %s",
+                       (new_warning_count, updated_reasons, user_id))
     else:
-        c.execute("INSERT INTO warnings (user_id, warnings, reasons) VALUES (%s, %s, %s)",
-                  (user_id, 1, formatted_reason))
+        cursor.execute("INSERT INTO warnings (user_id, warnings, reasons) VALUES (%s, %s, %s)",
+                       (user_id, 1, formatted_reason))
 
     conn.commit()
 
 
 def get_warning_count(user_id):
-    c.execute("SELECT warnings FROM warnings WHERE user_id = %s", (user_id,))
-    result = c.fetchone()
+    cursor.execute("SELECT warnings FROM warnings WHERE user_id = %s", (user_id,))
+    result = cursor.fetchone()
 
     return result[0] if result else 0
 
 
 def get_warning_reasons(user_id):
-    c.execute("SELECT reasons FROM warnings WHERE user_id = %s", (user_id,))
-    result = c.fetchone()
+    cursor.execute("SELECT reasons FROM warnings WHERE user_id = %s", (user_id,))
+    result = cursor.fetchone()
 
     if result and result[0]:
         return result[0]
@@ -81,7 +81,7 @@ def get_warning_reasons(user_id):
 
 
 def reset_warnings(user_id):
-    c.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
+    cursor.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
     conn.commit()
 
 
@@ -188,7 +188,6 @@ async def ungrant(update: Update, context):
     await update.message.reply_text(f"{user.full_name} už nema titula.")
 
 
-
 # Warning admin functions
 
 async def listwarn(update: Update, context):
@@ -249,7 +248,7 @@ async def resetwarn(update: Update, context):
         await update.message.reply_text(f"{update.effective_user.full_name} nema tejto moznosti.")
         return False
 
-    c.execute("UPDATE warnings SET warnings = 0")
+    cursor.execute("UPDATE warnings SET warnings = 0")
     conn.commit()
 
     await context.bot.send_message(chat_id=CHAT_ID, text="Všetky varovania boli automaticky resetované!")
