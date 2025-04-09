@@ -12,6 +12,7 @@ This is a **modular Telegram bot** built in Python, designed to handle various u
 - **Admin Panel** — Manage users, settings, and features.
 - **Modular Architecture** — Organized codebase for easy maintenance and scaling.
 - **Configurable via `config.py`** — Centralized configuration management.
+- **Database Integration** — Uses PostgreSQL for persistent data storage (for warnings and user data).
 
 ---
 
@@ -19,7 +20,6 @@ This is a **modular Telegram bot** built in Python, designed to handle various u
 
 ```
 telegram-bot/
-├── .idea               # IDE folder
 ├── .gitignore          # List of ignored files
 ├── admin.py            # Admin-specific functionalities
 ├── bot.py              # Main entry point of the bot
@@ -27,23 +27,24 @@ telegram-bot/
 ├── commands.py         # User command handling
 ├── config.py           # Bot configuration file
 ├── interactions.py     # User interaction logic
-├── LICENCE             # Licence for this repository
+├── db.py               # Centralized DB connection
+├── .env                # Environment variables (not committed)
 ├── README.md           # Project documentation
-└── requirements.txt    # List of Python dependencies
+├── requirements.txt    # List of Python dependencies
 ```
 
 ---
 
 ## Installation & Setup
 
-### 1⃣ Clone the Repository
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/bromscandium/telegram-bot
 cd telegram-bot
 ```
 
-### 2⃣ Install Dependencies
+### 2️⃣ Install Dependencies
 
 Ensure you have Python 3.x installed. Then install required libraries:
 
@@ -51,16 +52,20 @@ Ensure you have Python 3.x installed. Then install required libraries:
 pip install -r requirements.txt
 ```
 
-### 3⃣ Configure the Bot
+### 3️⃣ Set up Environment Variables
 
-Open `config.py` and add your **Telegram Bot API Token** along with other configuration parameters:
+Create a `.env` file in the root of the project directory and add the following variables:
 
-```python
-API_TOKEN = 'YOUR_API_TOKEN_HERE'
-# Other settings...
+```env
+TOKEN=YOUR_BOT_API_TOKEN
+CHAT_ID=YOUR_CHAT_ID
+ADMIN_CHAT_ID=YOUR_ADMIN_CHAT_ID
+ADMINS_ID=YOUR_ADMIN_USER_IDS
+DATABASE=YOUR_DATABASE_URL
+LINK=YOUR_LINK
 ```
 
-### 4⃣ Run the Bot
+### 4️⃣ Run the Bot
 
 ```bash
 python bot.py
@@ -79,9 +84,3 @@ python bot.py
 ## License
 
 This project is open-source. Feel free to use, modify, and distribute it under the terms provided (if applicable).
-
----
-
-## Contact
-
-For any questions or suggestions, feel free to open an issue or contact the maintainer.
