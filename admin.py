@@ -2,6 +2,7 @@ import psycopg2
 from telegram import Update, ChatPermissions, Chat
 from telegram.ext import CallbackContext
 from datetime import timedelta, datetime
+from db import conn, cursor
 
 from config import ADMINS_ID, CHAT_ID, DATABASE
 
@@ -35,20 +36,14 @@ async def is_possible(update, required_permission: str) -> bool:
 # Database functions
 
 def create_db():
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS warnings (
                     user_id BIGINT PRIMARY KEY,
                     warnings INTEGER DEFAULT 0,
                     reasons TEXT)''')
     conn.commit()
-    conn.close()
 
 
 def add_warning(user_id, reason):
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
-
     c.execute("SELECT warnings, reasons FROM warnings WHERE user_id = %s", (user_id,))
     result = c.fetchone()
 
@@ -67,25 +62,18 @@ def add_warning(user_id, reason):
                   (user_id, 1, formatted_reason))
 
     conn.commit()
-    conn.close()
 
 
 def get_warning_count(user_id):
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
     c.execute("SELECT warnings FROM warnings WHERE user_id = %s", (user_id,))
     result = c.fetchone()
-    conn.close()
 
     return result[0] if result else 0
 
 
 def get_warning_reasons(user_id):
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
     c.execute("SELECT reasons FROM warnings WHERE user_id = %s", (user_id,))
     result = c.fetchone()
-    conn.close()
 
     if result and result[0]:
         return result[0]
@@ -93,11 +81,8 @@ def get_warning_reasons(user_id):
 
 
 def reset_warnings(user_id):
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
     c.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
     conn.commit()
-    conn.close()
 
 
 # Basic admin functions
@@ -177,6 +162,33 @@ async def grant(update: Update, context):
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
 
+async def ungrant(update: Update, context):
+    if not await is_possible(update, 'can_promote_members'):
+        return
+
+    user = update.message.reply_to_message.from_user
+
+    await context.bot.promote_chat_member(
+        chat_id=CHAT_ID,
+        user_id=user.id,
+        can_change_info=False,
+        can_post_messages=False,
+        can_edit_messages=False,
+        can_delete_messages=False,
+        can_invite_users=False,
+        can_restrict_members=False,
+        can_pin_messages=False,
+        can_promote_members=False,
+        can_manage_chat=False,
+        can_manage_video_chats=False,
+        can_manage_topics=False,
+        is_anonymous=False
+    )
+
+    await update.message.reply_text(f"{user.full_name} už nema titula.")
+
+
+
 # Warning admin functions
 
 async def listwarn(update: Update, context):
@@ -237,10 +249,7 @@ async def resetwarn(update: Update, context):
         await update.message.reply_text(f"{update.effective_user.full_name} nema tejto moznosti.")
         return False
 
-    conn = psycopg2.connect(DATABASE, sslmode="require")
-    c = conn.cursor()
     c.execute("UPDATE warnings SET warnings = 0")
     conn.commit()
 
     await context.bot.send_message(chat_id=CHAT_ID, text="Všetky varovania boli automaticky resetované!")
-    conn.close()

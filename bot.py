@@ -1,3 +1,5 @@
+import atexit
+from db import conn, cursor
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
 from admin import *
 from chat import *
@@ -20,6 +22,7 @@ def main():
         "unwarn": unwarn,
         "resetwarn": resetwarn,
         "grant": grant,
+        "ungrant": ungrant,
         "start": start,
         "help": help,
         "rules": rules,
@@ -48,5 +51,13 @@ def main():
     bot.run_polling(drop_pending_updates=True)
 
 
+def close_db():
+    print("Closing database connection...")
+    cursor.close()
+    conn.close()
+
+
 if __name__ == '__main__':
     main()
+
+atexit.register(close_db)
