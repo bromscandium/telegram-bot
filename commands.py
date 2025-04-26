@@ -159,7 +159,11 @@ async def week(update: Update, context):
 
     if current_week:
         message = f"Sme v {current_week}. týždni semestra."
-    else:
-        message = f"Uvidíme sa {SEMESTER_START.strftime('%d.%m.%Y')}!"
+    elif current_week is 13:
+        message = f"Súdne týždne sú tu. Trinásty týždeň sa začal... a niet úniku"
+    elif current_week is 14:
+        message = f"Súdne týždne sú tu. Štrnásty týždeň sa začal... a niet úniku."
+    elif current_week >= 15:
+        message = f"Prajem vám veľa šťastia. Nech prežijú tí najsilnejší!"
 
     await update.message.reply_text(message)
