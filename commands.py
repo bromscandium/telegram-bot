@@ -157,7 +157,7 @@ async def week(update: Update, context):
     now = datetime.now()
     current_week = ((now - SEMESTER_START).days // 7) + 1 if now >= SEMESTER_START else None
 
-    if current_week:
+    if current_week <= 12:
         message = f"Sme v {current_week}. týždni semestra."
     elif current_week is 13:
         message = f"Súdne týždne sú tu. Trinásty týždeň sa začal... a niet úniku"
