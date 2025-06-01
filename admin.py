@@ -215,7 +215,7 @@ async def setnick(update: Update, context):
         custom_title=new_title
     )
 
-    await update.message.reply_text(f'✅ Novy titul pre {user.full_name}: {new_title}')
+    await update.message.reply_text(f'Novy titul pre {user.full_name}: {new_title}')
 
 
 async def ungrant(update: Update, context):
