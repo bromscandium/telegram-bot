@@ -147,7 +147,7 @@ async def grant(update: Update, context):
     if not await is_possible(update, 'can_promote_members'):
         return
 
-    user = update.message.reply_to_message.from_user
+    user = update.message.from_user
 
     await context.bot.promote_chat_member(
         chat_id=CHAT_ID,
