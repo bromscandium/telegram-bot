@@ -170,19 +170,36 @@ async def grant(update: Update, context):
 
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
-async def setnick(update: Update, context):
+
+async def setnick(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.message.from_user
 
     if user.id not in ADMINS_ID:
         await update.message.reply_text(f"{user.full_name}, toto je len pre administrátorov.")
-        return False
+        return
 
+    chat_member = await context.bot.get_chat_member(chat_id=CHAT_ID, user_id=user.id)
+
+    if chat_member.status != 'administrator':
+        await update.message.reply_text(f"{user.full_name}, musíš byť administrátor v skupine.")
+        return
 
     await context.bot.promote_chat_member(
         chat_id=CHAT_ID,
         user_id=user.id,
-        can_post_messages=True,
-        can_manage_chat=True
+        can_post_messages=chat_member.can_post_messages or False,
+        can_edit_messages=chat_member.can_edit_messages or False,
+        can_delete_messages=chat_member.can_delete_messages or False,
+        can_manage_chat=chat_member.can_manage_chat or False,
+        can_manage_video_chats=chat_member.can_manage_video_chats or False,
+        can_restrict_members=chat_member.can_restrict_members or False,
+        can_promote_members=chat_member.can_promote_members or False,
+        can_change_info=chat_member.can_change_info or False,
+        can_invite_users=chat_member.can_invite_users or False,
+        can_pin_messages=chat_member.can_pin_messages or False,
+        can_post_stories=getattr(chat_member, 'can_post_stories', False),
+        can_edit_stories=getattr(chat_member, 'can_edit_stories', False),
+        can_delete_stories=getattr(chat_member, 'can_delete_stories', False),
     )
 
     if len(update.message.text.split()) < 2:
@@ -197,7 +214,7 @@ async def setnick(update: Update, context):
         custom_title=new_title
     )
 
-    await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
+    await update.message.reply_text(f'✅ Novy titul pre {user.full_name}: {new_title}')
 
 async def ungrant(update: Update, context):
     if not await is_possible(update, 'can_promote_members'):
