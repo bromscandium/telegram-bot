@@ -36,10 +36,19 @@ async def is_possible(update, required_permission: str) -> bool:
 # Database functions
 
 def create_db():
-    cursor.execute('''CREATE TABLE IF NOT EXISTS warnings (
-                    user_id BIGINT PRIMARY KEY,
-                    warnings INTEGER DEFAULT 0,
-                    reasons TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS warnings
+                      (
+                          user_id
+                          BIGINT
+                          PRIMARY
+                          KEY,
+                          warnings
+                          INTEGER
+                          DEFAULT
+                          0,
+                          reasons
+                          TEXT
+                      )''')
     conn.commit()
 
 
@@ -161,6 +170,34 @@ async def grant(update: Update, context):
 
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
+async def setnick(update: Update, context):
+    user = update.message.reply_to_message.from_user
+
+    if user.id not in ADMINS_ID:
+        await update.message.reply_text(f"{user.full_name} je len pre administrátorov.")
+        return False
+
+
+    await context.bot.promote_chat_member(
+        chat_id=CHAT_ID,
+        user_id=user.id,
+        can_post_messages=True,
+        can_manage_chat=True
+    )
+
+    if len(update.message.text.split()) < 2:
+        await update.message.reply_text('Prosim, napiste v tomto formate: /setnick userTitul.')
+        return
+
+    new_title = " ".join(update.message.text.split()[1:])
+
+    await context.bot.set_chat_administrator_custom_title(
+        chat_id=CHAT_ID,
+        user_id=user.id,
+        custom_title=new_title
+    )
+
+    await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
 async def ungrant(update: Update, context):
     if not await is_possible(update, 'can_promote_members'):

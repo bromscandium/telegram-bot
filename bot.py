@@ -37,7 +37,8 @@ def main():
         "invite": invite,
         "week": week,
         "bless": bless,
-        "meme": meme
+        "meme": meme,
+        "setnick": setnick
     }
 
     for command, handler in commands.items():
