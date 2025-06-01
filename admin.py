@@ -193,6 +193,7 @@ async def setnick(update: Update, context):
         can_manage_chat=chat_member.can_manage_chat or False,
         can_manage_video_chats=chat_member.can_manage_video_chats or False,
         can_restrict_members=chat_member.can_restrict_members or False,
+        can_manage_topics=chat_member.can_manage_topics or False,
         can_promote_members=chat_member.can_promote_members or False,
         can_change_info=chat_member.can_change_info or False,
         can_invite_users=chat_member.can_invite_users or False,
