@@ -174,7 +174,7 @@ async def setnick(update: Update, context):
     user = update.message.from_user
 
     if user.id not in ADMINS_ID:
-        await update.message.reply_text(f"{user.full_name} je len pre administrátorov.")
+        await update.message.reply_text(f"{user.full_name}, toto je len pre administrátorov.")
         return False
 
 
