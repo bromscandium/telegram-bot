@@ -171,7 +171,7 @@ async def grant(update: Update, context):
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
 
-async def setnick(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def setnick(update: Update, context):
     user = update.message.from_user
 
     if user.id not in ADMINS_ID:
@@ -215,6 +215,7 @@ async def setnick(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.reply_text(f'✅ Novy titul pre {user.full_name}: {new_title}')
+
 
 async def ungrant(update: Update, context):
     if not await is_possible(update, 'can_promote_members'):
