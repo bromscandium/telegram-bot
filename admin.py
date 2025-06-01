@@ -171,7 +171,7 @@ async def grant(update: Update, context):
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
 async def setnick(update: Update, context):
-    user = update.message.reply_to_message.from_user
+    user = update.message.from_user
 
     if user.id not in ADMINS_ID:
         await update.message.reply_text(f"{user.full_name} je len pre administrátorov.")
