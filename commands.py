@@ -42,14 +42,14 @@ async def reset_command_usage(user_id: int, command: str):
 
 def personal_limit_usage(seconds):
     def decorator(func):
-        def wrapper(update: Update, context):
+        async def wrapper(update: Update, context):
             user_id = update.effective_user.id
             now = time.time()
             last_time = user_last_called.get(user_id, 0)
             if now - last_time < seconds:
                 return
             user_last_called[user_id] = now
-            func(update, context)
+            await func(update, context)
 
         return wrapper
 
