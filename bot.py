@@ -1,4 +1,7 @@
 import atexit
+
+from telegram import MessageEntity
+
 from database import conn, cursor
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
 from admin import *
@@ -38,8 +41,7 @@ def main():
         "week": week,
         "bless": bless,
         "meme": meme,
-        "setnick": setnick,
-        "grab_custom_id": grab_custom_id
+        "setnick": setnick
     }
 
     for command, handler in commands.items():
@@ -47,6 +49,13 @@ def main():
 
     bot.add_handler(MessageHandler(filters.ChatType.PRIVATE & ~filters.COMMAND, start_message))
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
+    bot.add_handler(
+        MessageHandler(
+            filters.ChatType.PRIVATE | filters.ChatType.GROUP | filters.ChatType.SUPERGROUP
+            & filters.Entity(MessageEntity.CUSTOM_EMOJI),
+            grab_custom_id
+        )
+    )
     bot.add_handler(MessageHandler(filters.ChatType.GROUP | filters.ChatType.SUPERGROUP & ~filters.COMMAND, reaction))
 
     print("Starting Telegram Bot...")
