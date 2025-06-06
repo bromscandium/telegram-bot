@@ -43,12 +43,8 @@ async def reaction(update: Update, context):
                 reaction=[random.choice(REACTIONS)],
                 is_big=False
             )
-            await context.bot.send_message(
-                chat_id=update.message.chat_id,
-                text=f"Ось кастомний emoji ID: {random.choice(REACTIONS)}"
-            )
             message_counter = 0
-            next_reaction = random.randint(1, 2)
+            next_reaction = random.randint(1, 10)
 
 @personal_limit_usage(12000)
 async def bless(update: Update, context):
