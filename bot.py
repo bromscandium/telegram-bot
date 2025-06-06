@@ -49,13 +49,6 @@ def main():
 
     bot.add_handler(MessageHandler(filters.ChatType.PRIVATE & ~filters.COMMAND, start_message))
     bot.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
-    bot.add_handler(
-        MessageHandler(
-            filters.ChatType.PRIVATE | filters.ChatType.GROUP | filters.ChatType.SUPERGROUP
-            & filters.Entity(MessageEntity.CUSTOM_EMOJI),
-            grab_custom_id
-        )
-    )
     bot.add_handler(MessageHandler(filters.ChatType.GROUP | filters.ChatType.SUPERGROUP & ~filters.COMMAND, reaction))
 
     print("Starting Telegram Bot...")

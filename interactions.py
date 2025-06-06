@@ -31,14 +31,6 @@ async def welcome(update: Update, context):
                 parse_mode="HTML"
             )
 
-async def grab_custom_id(update: Update, context):
-    if update.message.entities:
-        for ent in update.message.entities:
-            if ent.type == "custom_emoji":
-                emoji_id = ent.custom_emoji_id
-                await update.message.reply_text(f"Found ID: {emoji_id}")
-
-
 async def reaction(update: Update, context):
     global message_counter, next_reaction
     if update.message:
@@ -48,7 +40,7 @@ async def reaction(update: Update, context):
             await context.bot.set_message_reaction(
                 chat_id=update.message.chat_id,
                 message_id=update.message.message_id,
-                reaction=[ReactionTypeCustomEmoji(custom_emoji_id=emoji_id)],
+                reaction=[ReactionTypeCustomEmoji(custom_emoji_id="5454327849936755071")],
                 is_big=False
             )
             message_counter = 0
