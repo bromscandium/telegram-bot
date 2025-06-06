@@ -41,10 +41,11 @@ async def reaction(update: Update, context):
             await context.bot.set_message_reaction(
                 chat_id=update.message.chat_id,
                 message_id=update.message.message_id,
-                reaction=emoji_id,
+                reaction=[ReactionTypeCustomEmoji(custom_emoji_id=emoji_id)],
                 is_big=False
             )
             message_counter = 0
+
             next_reaction = random.randint(1, 10)
 
 @personal_limit_usage(12000)
