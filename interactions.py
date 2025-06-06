@@ -37,10 +37,11 @@ async def reaction(update: Update, context):
     if update.message:
         message_counter += 1
         if message_counter >= next_reaction:
+            emoji_id = random.choice(REACTIONS)
             await context.bot.set_message_reaction(
                 chat_id=update.message.chat_id,
                 message_id=update.message.message_id,
-                reaction=[random.choice(REACTIONS)],
+                reaction=emoji_id,
                 is_big=False
             )
             message_counter = 0
