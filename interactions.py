@@ -7,7 +7,7 @@ from config import REACTIONS, CHAT_ID, ADMINS_ID
 from telegram import Update, ChatPermissions, ReactionTypeCustomEmoji
 
 message_counter = 0
-next_reaction = random.randint(75, 150)
+next_reaction = random.randint(1, 10)
 
 
 # Interactions with users
