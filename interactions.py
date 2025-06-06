@@ -7,7 +7,7 @@ from config import REACTIONS, CHAT_ID, ADMINS_ID
 from telegram import Update, ChatPermissions
 
 message_counter = 0
-next_reaction = random.randint(40, 120)
+next_reaction = random.randint(100, 170)
 
 
 # Interactions with users
@@ -44,7 +44,7 @@ async def reaction(update: Update, context):
             )
             message_counter = 0
 
-            next_reaction = random.randint(40, 120)
+            next_reaction = random.randint(100, 170)
 
 @personal_limit_usage(12000)
 async def bless(update: Update, context):
