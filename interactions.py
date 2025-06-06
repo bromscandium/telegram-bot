@@ -4,10 +4,10 @@ from datetime import timedelta
 from admin import is_possible
 from commands import personal_limit_usage
 from config import REACTIONS, CHAT_ID, ADMINS_ID
-from telegram import Update, ChatPermissions, ReactionTypeCustomEmoji
+from telegram import Update, ChatPermissions
 
 message_counter = 0
-next_reaction = random.randint(1, 3)
+next_reaction = random.randint(40, 120)
 
 
 # Interactions with users
@@ -44,7 +44,7 @@ async def reaction(update: Update, context):
             )
             message_counter = 0
 
-            next_reaction = random.randint(1, 3)
+            next_reaction = random.randint(40, 120)
 
 @personal_limit_usage(12000)
 async def bless(update: Update, context):
