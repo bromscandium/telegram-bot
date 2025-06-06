@@ -1,6 +1,8 @@
 from telegram import Update, ChatPermissions, Chat
 from telegram.ext import CallbackContext
 from datetime import timedelta, datetime
+
+from commands import personal_limit_usage
 from database import conn, cursor
 
 from config import ADMINS_ID, CHAT_ID
@@ -109,7 +111,7 @@ async def grant(update: Update, context):
 
     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
 
-
+@personal_limit_usage(12000)
 async def setnick(update: Update, context):
     user = update.message.from_user
 
