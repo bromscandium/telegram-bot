@@ -38,7 +38,8 @@ def main():
         "week": week,
         "bless": bless,
         "meme": meme,
-        "setnick": setnick
+        "setnick": setnick,
+        "grab_custom_id": grab_custom_id
     }
 
     for command, handler in commands.items():

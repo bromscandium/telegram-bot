@@ -7,7 +7,7 @@ from config import REACTIONS, CHAT_ID, ADMINS_ID
 from telegram import Update, ChatPermissions, ReactionTypeCustomEmoji
 
 message_counter = 0
-next_reaction = random.randint(1, 10)
+next_reaction = random.randint(1, 3)
 
 
 # Interactions with users
@@ -31,6 +31,13 @@ async def welcome(update: Update, context):
                 parse_mode="HTML"
             )
 
+async def grab_custom_id(update: Update, context):
+    if update.message.entities:
+        for ent in update.message.entities:
+            if ent.type == "custom_emoji":
+                emoji_id = ent.custom_emoji_id
+                await update.message.reply_text(f"Found ID: {emoji_id}")
+
 
 async def reaction(update: Update, context):
     global message_counter, next_reaction
@@ -46,7 +53,7 @@ async def reaction(update: Update, context):
             )
             message_counter = 0
 
-            next_reaction = random.randint(1, 10)
+            next_reaction = random.randint(1, 3)
 
 @personal_limit_usage(12000)
 async def bless(update: Update, context):
