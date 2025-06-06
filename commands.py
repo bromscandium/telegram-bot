@@ -177,9 +177,9 @@ async def week(update: Update, context):
 
     if current_week <= 12:
         message = f"Sme v {current_week}. týždni semestra."
-    elif current_week is 13:
+    elif current_week == 13:
         message = f"Súdne týždne sú tu. Trinásty týždeň sa začal... a niet úniku"
-    elif current_week is 14:
+    elif current_week == 14:
         message = f"Súdne týždne sú tu. Štrnásty týždeň sa začal... a niet úniku."
     elif current_week >= 15:
         message = f"Prajem vám veľa šťastia. Nech prežijú tí najsilnejší!"

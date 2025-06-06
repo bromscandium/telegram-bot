@@ -30,8 +30,7 @@ async def is_possible(update, required_permission: str) -> bool:
             else:
                 await update.message.reply_text(f"{admin.user.full_name} nema tejto moznosti.")
                 return False
-        return False
-    return False
+    return True
 
 
 # Basic admin functions
