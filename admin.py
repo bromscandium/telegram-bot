@@ -1,10 +1,9 @@
-import psycopg2
 from telegram import Update, ChatPermissions, Chat
 from telegram.ext import CallbackContext
 from datetime import timedelta, datetime
-from db import conn, cursor
+from database import conn, cursor
 
-from config import ADMINS_ID, CHAT_ID, DATABASE
+from config import ADMINS_ID, CHAT_ID
 
 
 # Checking function
@@ -31,67 +30,8 @@ async def is_possible(update, required_permission: str) -> bool:
             else:
                 await update.message.reply_text(f"{admin.user.full_name} nema tejto moznosti.")
                 return False
-
-
-# Database functions
-
-def create_db():
-    cursor.execute('''CREATE TABLE IF NOT EXISTS warnings
-                      (
-                          user_id
-                          BIGINT
-                          PRIMARY
-                          KEY,
-                          warnings
-                          INTEGER
-                          DEFAULT
-                          0,
-                          reasons
-                          TEXT
-                      )''')
-    conn.commit()
-
-
-def add_warning(user_id, reason):
-    cursor.execute("SELECT warnings, reasons FROM warnings WHERE user_id = %s", (user_id,))
-    result = cursor.fetchone()
-
-    timestamp = datetime.now().strftime("%d.%m %H:%M")
-    formatted_reason = f"{timestamp} {reason}"
-
-    if result:
-        warnings_count, reasons = result
-        new_warning_count = warnings_count + 1
-        updated_reasons = reasons + f"\n{formatted_reason}" if reasons else formatted_reason
-
-        cursor.execute("UPDATE warnings SET warnings = %s, reasons = %s WHERE user_id = %s",
-                       (new_warning_count, updated_reasons, user_id))
-    else:
-        cursor.execute("INSERT INTO warnings (user_id, warnings, reasons) VALUES (%s, %s, %s)",
-                       (user_id, 1, formatted_reason))
-
-    conn.commit()
-
-
-def get_warning_count(user_id):
-    cursor.execute("SELECT warnings FROM warnings WHERE user_id = %s", (user_id,))
-    result = cursor.fetchone()
-
-    return result[0] if result else 0
-
-
-def get_warning_reasons(user_id):
-    cursor.execute("SELECT reasons FROM warnings WHERE user_id = %s", (user_id,))
-    result = cursor.fetchone()
-
-    if result and result[0]:
-        return result[0]
-    return "—"
-
-
-def reset_warnings(user_id):
-    cursor.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
-    conn.commit()
+        return False
+    return False
 
 
 # Basic admin functions
@@ -147,7 +87,7 @@ async def grant(update: Update, context):
     if not await is_possible(update, 'can_promote_members'):
         return
 
-    user = update.message.from_user
+    user = update.message.reply_to_message.from_user
 
     await context.bot.promote_chat_member(
         chat_id=CHAT_ID,

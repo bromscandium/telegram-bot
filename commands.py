@@ -1,5 +1,6 @@
 import asyncio
-from datetime import datetime
+import time
+from datetime import datetime, timedelta
 
 from telegram import Update
 
@@ -7,6 +8,7 @@ from config import CHAT_ID, ADMIN_CHAT_ID, SEMESTER_START, LINK
 
 message_counter = 0
 command_usage = {}
+user_last_called = {}
 
 
 # Helpful commands
@@ -36,6 +38,22 @@ async def reset_command_usage(user_id: int, command: str):
             del command_usage[user_id][command]
         if not command_usage[user_id]:
             del command_usage[user_id]
+
+
+def personal_limit_usage(seconds):
+    def decorator(func):
+        def wrapper(update: Update, context):
+            user_id = update.effective_user.id
+            now = time.time()
+            last_time = user_last_called.get(user_id, 0)
+            if now - last_time < seconds:
+                return
+            user_last_called[user_id] = now
+            func(update, context)
+
+        return wrapper
+
+    return decorator
 
 
 # User commands

@@ -1,8 +1,10 @@
 import random
 from datetime import timedelta
 
+from admin import is_possible
+from commands import personal_limit_usage
 from config import REACTIONS, CHAT_ID, ADMINS_ID
-from telegram import Update, ChatPermissions
+from telegram import Update, ChatPermissions, ReactionTypeCustomEmoji
 
 message_counter = 0
 next_reaction = random.randint(75, 150)
@@ -35,12 +37,22 @@ async def reaction(update: Update, context):
     if update.message:
         message_counter += 1
         if message_counter >= next_reaction:
-            await update.message.set_reaction(reaction=random.choice(REACTIONS), is_big=False)
+            await context.bot.set_message_reaction(
+                chat_id=update.message.chat_id,
+                message_id=update.message.message_id,
+                reaction=[
+                    ReactionTypeCustomEmoji(custom_emoji_id=random.choice(REACTIONS)),
+                ],
+                is_big=False
+            )
             message_counter = 0
-            next_reaction = random.randint(75, 150)
+            next_reaction = random.randint(1, 2)
 
-
+@personal_limit_usage(21600)
 async def bless(update: Update, context):
+    if await is_possible(update, 'can_promote_members'):
+        return
+
     boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
     if (not boosts.boosts) is True:
         await update.message.reply_text('Povoleny len pre boosterov!')

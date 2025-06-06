@@ -1,5 +1,5 @@
 import atexit
-from db import conn, cursor
+from database import conn, cursor
 from telegram.ext import CommandHandler, ApplicationBuilder, MessageHandler, filters
 from admin import *
 from chat import *
