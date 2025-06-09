@@ -48,8 +48,7 @@ async def reaction(update: Update, context):
 
 @personal_limit_usage(12000)
 async def bless(update: Update, context):
-    if await is_possible(update, 'can_promote_members'):
-        return
+
 
     boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
     if (not boosts.boosts) is True:
