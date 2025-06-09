@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext
 from datetime import timedelta, datetime
 
 from commands import personal_limit_usage
-from database import conn, cursor
+from database import *
 
 from config import ADMINS_ID, CHAT_ID
 
