@@ -27,7 +27,7 @@ def main():
         "grant": grant,
         "ungrant": ungrant,
         "start": start,
-        "help": help,
+        # "help": help,
         "rules": rules,
         "moodle": moodle,
         "links": links,

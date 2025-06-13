@@ -59,15 +59,15 @@ def personal_limit_usage(seconds):
 
 # User commands
 
-@limit_usage
-async def help(update: Update, context):
-    if update.message:
-        await context.bot.copy_message(
-            chat_id=update.effective_chat.id,
-            from_chat_id=ADMIN_CHAT_ID,
-            message_id=12066,
-            message_thread_id=update.message.message_thread_id,
-        )
+# @limit_usage
+# async def help(update: Update, context):
+#     if update.message:
+#         await context.bot.copy_message(
+#             chat_id=update.effective_chat.id,
+#             from_chat_id=ADMIN_CHAT_ID,
+#             message_id=12066,
+#             message_thread_id=update.message.message_thread_id,
+#         )
 
 
 @limit_usage
