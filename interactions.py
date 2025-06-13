@@ -46,7 +46,7 @@ async def reaction(update: Update, context):
 
             next_reaction = random.randint(100, 170)
 
-@personal_limit_usage(12000)
+@personal_limit_usage(60)
 async def bless(update: Update, context):
 
 
