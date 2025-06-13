@@ -48,12 +48,7 @@ async def reaction(update: Update, context):
 
 @personal_limit_usage(60)
 async def bless(update: Update, context):
-
-
     boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
-    if (not boosts.boosts) is True:
-        await update.message.reply_text('Povoleny len pre boosterov!')
-        return
 
     if len(update.message.text.split()) < 2:
         await update.message.reply_text('Prosim, napiste v tomto formate: /bless VasTitul.')
