@@ -8,6 +8,7 @@ ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
 ADMINS_ID = list(map(int, os.getenv("ADMINS_ID", "").split(",")))
 DATABASE = os.getenv("DATABASE")
 LINK = os.getenv("LINK")
+BLACK_LIST = os.getenv("BLACK_LIST")
 
 # Constant variables
 REACTIONS = ["🔥", "👍", "😢", "😁", "👎", "🤯", "😎", "🥰"]
