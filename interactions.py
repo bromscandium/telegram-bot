@@ -2,6 +2,8 @@ import random, hashlib
 import aiohttp
 from datetime import timedelta, datetime
 
+from telegram.ext import CallbackContext
+
 from admin import is_possible
 from commands import personal_limit_usage
 from config import REACTIONS, CHAT_ID, ADMINS_ID, BLACKLIST, WEATHER_API_KEY
@@ -96,8 +98,7 @@ async def meme(update: Update, context):
 
     await update.message.reply_text(f"Ledač {update.message.from_user.full_name} zaspal na 180 sekúnd.")
 
-
-@personal_limit_usage(1200)
+@personal_limit_usage(61)
 async def predict(update: Update, context):
     prediction = get_random_prediction()
     await update.message.reply_text(
@@ -107,7 +108,6 @@ async def predict(update: Update, context):
     )
 
 
-@personal_limit_usage(3600)
 async def weather(update: Update, context):
     city = "Kosice"
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}&units=metric&lang=sk"
@@ -142,7 +142,6 @@ async def weather(update: Update, context):
     await update.message.reply_text(msg)
 
 
-@personal_limit_usage(61)
 async def chance(update: Update, context):
     text = (update.message.text or "")
     parts = text.split(maxsplit=1)
@@ -157,3 +156,7 @@ async def chance(update: Update, context):
 
         num = random.randint(0, 100)
         await update.message.reply_text(f"Šanca byť gejom: {num}%")
+
+
+async def goko_4orta(update: Update, context):
+    await update.message.reply_text("/goko_4оrta")

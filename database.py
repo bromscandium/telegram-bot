@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2.extras
 from config import DATABASE
 from datetime import timedelta, datetime
 
@@ -27,7 +27,7 @@ def create_db():
                    """)
     # predictions
     cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS predictions
+                   CREATE TABLE IF NOT EXISTS megapredictions
                    (
                        id
                        BIGSERIAL
@@ -36,10 +36,64 @@ def create_db():
                        text
                        TEXT
                        NOT
+                       NULL,
+                       locale
+                       TEXT
+                       NOT
                        NULL
+                       DEFAULT
+                       'uk',
+                       created_at
+                       TIMESTAMPTZ
+                       NOT
+                       NULL
+                       DEFAULT
+                       now
+                   (
+                   ),
+                       CONSTRAINT predictions_text_uniq UNIQUE
+                   (
+                       text
                    )
+                       );
+
                    """)
     conn.commit()
+
+
+def add_prediction(text: str, locale: str = "uk"):
+    cursor.execute(
+        """
+        INSERT INTO predictions (text, locale)
+        VALUES (%s, %s)
+        ON CONFLICT (text) DO NOTHING
+        """,
+        (text, locale),
+    )
+
+def add_predictions_from_block(block: str, locale: str = "uk"):
+    # Розбиваємо за рядками, чистимо пробіли і порожні
+    lines = [ln.strip() for ln in block.splitlines()]
+    lines = [ln for ln in lines if ln]  # без порожніх
+
+    if not lines:
+        return 0
+
+    # Масова вставка (швидко) + ігнор дублікатів
+    template = "(%s, %s)"
+    psycopg2.extras.execute_values(
+        cursor,
+        """
+        INSERT INTO predictions (text, locale)
+        VALUES %s
+        ON CONFLICT (text) DO NOTHING
+        """,
+        ((ln, locale) for ln in lines),
+        template=template,
+        page_size=1000,
+    )
+    conn.commit()
+    return len(lines)
 
 
 def add_warning(user_id, reason):
