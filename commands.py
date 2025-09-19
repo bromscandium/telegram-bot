@@ -173,11 +173,14 @@ async def invite(update: Update, context):
 @limit_usage
 async def week(update: Update, context):
     now = datetime.now()
-    current_week = ((now - SEMESTER_START).days // 7) + 1 if now >= SEMESTER_START else None
 
-    if current_week <= 13:
-        message = f"Sme v {current_week}. týždni semestra."
+    if now < SEMESTER_START:
+        message = f"Semester sa začne {SEMESTER_START.strftime('%d.%m.%Y')}."
     else:
-        message = f"Uvidime sa 22.09.2025"
+        current_week = ((now - SEMESTER_START).days // 7) + 1
+        if current_week <= 13:
+            message = f"Sme v {current_week}. týždni semestra."
+        else:
+            message = "Uvidíme sa neskor"
 
     await update.message.reply_text(message)
