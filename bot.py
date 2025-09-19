@@ -43,7 +43,7 @@ def main():
         "meme": meme,
         "predict": predict,
         "weather": weather,
-        "randomizer": random
+        "chance": chance
         # "setnick": setnick
     }
 

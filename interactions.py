@@ -143,7 +143,7 @@ async def weather(update: Update, context):
 
 
 @personal_limit_usage(61)
-async def randomizer(update: Update, context):
+async def chance(update: Update, context):
     text = (update.message.text or "")
     parts = text.split(maxsplit=1)
     query = parts[1].strip() if len(parts) > 1 else ""
@@ -151,9 +151,9 @@ async def randomizer(update: Update, context):
     if query:
 
         key = hashlib.md5(query.lower().encode("utf-8")).hexdigest()
-        chance = int(key[:8], 16) % 101
-        await update.message.reply_text(f"Šanca pre „{query}“: {chance}%")
+        num = int(key[:8], 16) % 101
+        await update.message.reply_text(f"Šanca pre „{query}“: {num}%")
     else:
 
-        chance = random.randint(0, 100)
-        await update.message.reply_text(f"Šanca byť gejom: {chance}%")
+        num = random.randint(0, 100)
+        await update.message.reply_text(f"Šanca byť gejom: {num}%")
