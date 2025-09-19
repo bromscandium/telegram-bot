@@ -188,7 +188,11 @@ async def unban(update: Update, context):
 # Warning admin functions
 
 async def listwarn(update: Update, context):
-    user = (update.message.reply_to_message.from_user  or update.message.from_user)
+    if update.message.reply_to_message:
+        user = update.message.reply_to_message.from_user
+    else:
+        user = update.message.from_user
+
 
     warnings_count = get_warning_count(user.id)
     reasons = get_warning_reasons(user.id)
