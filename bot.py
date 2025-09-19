@@ -24,8 +24,8 @@ def main():
         "warn": warn,
         "unwarn": unwarn,
         "resetwarn": resetwarn,
-        "grant": grant,
-        "ungrant": ungrant,
+        # "grant": grant,
+        # "ungrant": ungrant,
         "start": start,
         # "help": help,
         "rules": rules,
@@ -39,9 +39,12 @@ def main():
         "schedule": schedule,
         "invite": invite,
         "week": week,
-        "bless": bless,
+        # "bless": bless,
         "meme": meme,
-        "setnick": setnick
+        "predict": predict,
+        "weather": weather,
+        "randomizer": random
+        # "setnick": setnick
     }
 
     for command, handler in commands.items():

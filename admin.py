@@ -84,113 +84,110 @@ async def unban(update: Update, context):
     await update.message.reply_text(f"Ledač {user.full_name} sa môže zobudiť.")
 
 
-async def grant(update: Update, context):
-    if not await is_possible(update, 'can_promote_members'):
-        return
-
-    user = update.message.reply_to_message.from_user
-
-    await context.bot.promote_chat_member(
-        chat_id=CHAT_ID,
-        user_id=user.id,
-        can_post_messages=True,
-        can_manage_chat=True
-    )
-
-    if len(update.message.text.split()) < 2:
-        await update.message.reply_text('Prosim, napiste v tomto formate: /grant userTitul.')
-        return
-
-    new_title = " ".join(update.message.text.split()[1:])
-
-    await context.bot.set_chat_administrator_custom_title(
-        chat_id=CHAT_ID,
-        user_id=user.id,
-        custom_title=new_title
-    )
-
-    await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
-
-@personal_limit_usage(12000)
-async def setnick(update: Update, context):
-    user = update.message.from_user
-
-    if user.id not in ADMINS_ID:
-        await update.message.reply_text(f"{user.full_name}, toto je len pre administrátorov.")
-        return
-
-    chat_member = await context.bot.get_chat_member(chat_id=CHAT_ID, user_id=user.id)
-
-    if chat_member.status != 'administrator':
-        await update.message.reply_text(f"{user.full_name}, musíš byť administrátor v skupine.")
-        return
-
-    await context.bot.promote_chat_member(
-        chat_id=CHAT_ID,
-        user_id=user.id,
-        can_post_messages=chat_member.can_post_messages or False,
-        can_edit_messages=chat_member.can_edit_messages or False,
-        can_delete_messages=chat_member.can_delete_messages or False,
-        can_manage_chat=chat_member.can_manage_chat or False,
-        can_manage_video_chats=chat_member.can_manage_video_chats or False,
-        can_restrict_members=chat_member.can_restrict_members or False,
-        can_manage_topics=chat_member.can_manage_topics or False,
-        can_promote_members=chat_member.can_promote_members or False,
-        can_change_info=chat_member.can_change_info or False,
-        can_invite_users=chat_member.can_invite_users or False,
-        can_pin_messages=chat_member.can_pin_messages or False,
-        can_post_stories=getattr(chat_member, 'can_post_stories', False),
-        can_edit_stories=getattr(chat_member, 'can_edit_stories', False),
-        can_delete_stories=getattr(chat_member, 'can_delete_stories', False),
-    )
-
-    if len(update.message.text.split()) < 2:
-        await update.message.reply_text('Prosim, napiste v tomto formate: /setnick userTitul.')
-        return
-
-    new_title = " ".join(update.message.text.split()[1:])
-
-    await context.bot.set_chat_administrator_custom_title(
-        chat_id=CHAT_ID,
-        user_id=user.id,
-        custom_title=new_title
-    )
-
-    await update.message.reply_text(f'Novy titul pre {user.full_name}: {new_title}')
-
-
-async def ungrant(update: Update, context):
-    if not await is_possible(update, 'can_promote_members'):
-        return
-
-    user = update.message.reply_to_message.from_user
-
-    await context.bot.promote_chat_member(
-        chat_id=CHAT_ID,
-        user_id=user.id,
-        can_change_info=False,
-        can_post_messages=False,
-        can_edit_messages=False,
-        can_delete_messages=False,
-        can_invite_users=False,
-        can_restrict_members=False,
-        can_pin_messages=False,
-        can_promote_members=False,
-        can_manage_chat=False,
-        can_manage_video_chats=False,
-        can_manage_topics=False,
-        is_anonymous=False
-    )
-
-    await update.message.reply_text(f"{user.full_name} už nema titula.")
+# async def grant(update: Update, context):
+#     if not await is_possible(update, 'can_promote_members'):
+#         return
+#
+#     user = update.message.reply_to_message.from_user
+#
+#     await context.bot.promote_chat_member(
+#         chat_id=CHAT_ID,
+#         user_id=user.id,
+#         can_post_messages=True,
+#         can_manage_chat=True
+#     )
+#
+#     if len(update.message.text.split()) < 2:
+#         await update.message.reply_text('Prosim, napiste v tomto formate: /grant userTitul.')
+#         return
+#
+#     new_title = " ".join(update.message.text.split()[1:])
+#
+#     await context.bot.set_chat_administrator_custom_title(
+#         chat_id=CHAT_ID,
+#         user_id=user.id,
+#         custom_title=new_title
+#     )
+#
+#     await update.message.reply_text(f'Novy titul {user.full_name}: {new_title}')
+#
+# @personal_limit_usage(12000)
+# async def setnick(update: Update, context):
+#     user = update.message.from_user
+#
+#     if user.id not in ADMINS_ID:
+#         await update.message.reply_text(f"{user.full_name}, toto je len pre administrátorov.")
+#         return
+#
+#     chat_member = await context.bot.get_chat_member(chat_id=CHAT_ID, user_id=user.id)
+#
+#     if chat_member.status != 'administrator':
+#         await update.message.reply_text(f"{user.full_name}, musíš byť administrátor v skupine.")
+#         return
+#
+#     await context.bot.promote_chat_member(
+#         chat_id=CHAT_ID,
+#         user_id=user.id,
+#         can_post_messages=chat_member.can_post_messages or False,
+#         can_edit_messages=chat_member.can_edit_messages or False,
+#         can_delete_messages=chat_member.can_delete_messages or False,
+#         can_manage_chat=chat_member.can_manage_chat or False,
+#         can_manage_video_chats=chat_member.can_manage_video_chats or False,
+#         can_restrict_members=chat_member.can_restrict_members or False,
+#         can_manage_topics=chat_member.can_manage_topics or False,
+#         can_promote_members=chat_member.can_promote_members or False,
+#         can_change_info=chat_member.can_change_info or False,
+#         can_invite_users=chat_member.can_invite_users or False,
+#         can_pin_messages=chat_member.can_pin_messages or False,
+#         can_post_stories=getattr(chat_member, 'can_post_stories', False),
+#         can_edit_stories=getattr(chat_member, 'can_edit_stories', False),
+#         can_delete_stories=getattr(chat_member, 'can_delete_stories', False),
+#     )
+#
+#     if len(update.message.text.split()) < 2:
+#         await update.message.reply_text('Prosim, napiste v tomto formate: /setnick userTitul.')
+#         return
+#
+#     new_title = " ".join(update.message.text.split()[1:])
+#
+#     await context.bot.set_chat_administrator_custom_title(
+#         chat_id=CHAT_ID,
+#         user_id=user.id,
+#         custom_title=new_title
+#     )
+#
+#     await update.message.reply_text(f'Novy titul pre {user.full_name}: {new_title}')
+#
+#
+# async def ungrant(update: Update, context):
+#     if not await is_possible(update, 'can_promote_members'):
+#         return
+#
+#     user = update.message.reply_to_message.from_user
+#
+#     await context.bot.promote_chat_member(
+#         chat_id=CHAT_ID,
+#         user_id=user.id,
+#         can_change_info=False,
+#         can_post_messages=False,
+#         can_edit_messages=False,
+#         can_delete_messages=False,
+#         can_invite_users=False,
+#         can_restrict_members=False,
+#         can_pin_messages=False,
+#         can_promote_members=False,
+#         can_manage_chat=False,
+#         can_manage_video_chats=False,
+#         can_manage_topics=False,
+#         is_anonymous=False
+#     )
+#
+#     await update.message.reply_text(f"{user.full_name} už nema titula.")
 
 
 # Warning admin functions
 
 async def listwarn(update: Update, context):
-    if not await is_possible(update, 'can_restrict_members'):
-        return
-
     user = update.message.reply_to_message.from_user
 
     warnings_count = get_warning_count(user.id)

@@ -1,4 +1,5 @@
 python-telegram-bot==21.10
-psycopg2-binary
+psycopg2-binary~=2.9.10
 apscheduler
 python-dotenv
+aiohttp~=3.11.18

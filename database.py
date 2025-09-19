@@ -9,19 +9,36 @@ cursor = conn.cursor()
 # Database functions
 
 def create_db():
-    cursor.execute('''CREATE TABLE IF NOT EXISTS warnings
-                      (
-                          user_id
-                          BIGINT
-                          PRIMARY
-                          KEY,
-                          warnings
-                          INTEGER
-                          DEFAULT
-                          0,
-                          reasons
-                          TEXT
-                      )''')
+    # warnings
+    cursor.execute("""
+                   CREATE TABLE IF NOT EXISTS warnings
+                   (
+                       user_id
+                       BIGINT
+                       PRIMARY
+                       KEY,
+                       warnings
+                       INTEGER
+                       DEFAULT
+                       0,
+                       reasons
+                       TEXT
+                   )
+                   """)
+    # predictions
+    cursor.execute("""
+                   CREATE TABLE IF NOT EXISTS predictions
+                   (
+                       id
+                       BIGSERIAL
+                       PRIMARY
+                       KEY,
+                       text
+                       TEXT
+                       NOT
+                       NULL
+                   )
+                   """)
     conn.commit()
 
 
@@ -65,3 +82,9 @@ def get_warning_reasons(user_id):
 def reset_warnings(user_id):
     cursor.execute("UPDATE warnings SET warnings = 0 WHERE user_id = %s", (user_id,))
     conn.commit()
+
+
+def get_random_prediction():
+    cursor.execute("SELECT text FROM predictions ORDER BY RANDOM() LIMIT 1")
+    row = cursor.fetchone()
+    return row[0] if row else "—"
