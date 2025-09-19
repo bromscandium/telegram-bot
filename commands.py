@@ -47,7 +47,6 @@ def personal_limit_usage(seconds):
             now = time.time()
             last_time = user_last_called.get(user_id, 0)
             if now - last_time < seconds:
-                print(f'{update.effective_user.id} used bless, but left time is {now - last_time} of {seconds} seconds.')
                 return
             user_last_called[user_id] = now
             await func(update, context)
@@ -176,13 +175,9 @@ async def week(update: Update, context):
     now = datetime.now()
     current_week = ((now - SEMESTER_START).days // 7) + 1 if now >= SEMESTER_START else None
 
-    if current_week <= 12:
+    if current_week <= 13:
         message = f"Sme v {current_week}. týždni semestra."
-    elif current_week == 13:
-        message = f"Súdne týždne sú tu. Trinásty týždeň sa začal... a niet úniku"
-    elif current_week == 14:
-        message = f"Súdne týždne sú tu. Štrnásty týždeň sa začal... a niet úniku."
-    elif current_week >= 15:
-        message = f"Prajem vám veľa šťastia. Nech prežijú tí najsilnejší!"
+    else:
+        message = f"Uvidime sa 22.09.2025"
 
     await update.message.reply_text(message)
