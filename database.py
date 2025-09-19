@@ -8,57 +8,26 @@ cursor = conn.cursor()
 
 # Database functions
 
+# database.py
 def create_db():
-    # warnings
     cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS warnings
-                   (
-                       user_id
-                       BIGINT
-                       PRIMARY
-                       KEY,
-                       warnings
-                       INTEGER
-                       DEFAULT
-                       0,
-                       reasons
-                       TEXT
-                   )
-                   """)
-    # predictions
+        CREATE TABLE IF NOT EXISTS warnings (
+            user_id   BIGINT PRIMARY KEY,
+            warnings  INTEGER DEFAULT 0,
+            reasons   TEXT
+        );
+    """)
     cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS megapredictions
-                   (
-                       id
-                       BIGSERIAL
-                       PRIMARY
-                       KEY,
-                       text
-                       TEXT
-                       NOT
-                       NULL,
-                       locale
-                       TEXT
-                       NOT
-                       NULL
-                       DEFAULT
-                       'uk',
-                       created_at
-                       TIMESTAMPTZ
-                       NOT
-                       NULL
-                       DEFAULT
-                       now
-                   (
-                   ),
-                       CONSTRAINT predictions_text_uniq UNIQUE
-                   (
-                       text
-                   )
-                       );
-
-                   """)
+        CREATE TABLE IF NOT EXISTS predictions (
+            id         BIGSERIAL PRIMARY KEY,
+            text       TEXT NOT NULL,
+            locale     TEXT NOT NULL DEFAULT 'uk',
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            CONSTRAINT predictions_text_uniq UNIQUE (text)
+        );
+    """)
     conn.commit()
+
 
 
 def add_prediction(text: str, locale: str = "uk"):
