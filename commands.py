@@ -58,22 +58,11 @@ def personal_limit_usage(seconds):
 
 # User commands
 
-# @limit_usage
-# async def help(update: Update, context):
-#     if update.message:
-#         await context.bot.copy_message(
-#             chat_id=update.effective_chat.id,
-#             from_chat_id=ADMIN_CHAT_ID,
-#             message_id=12066,
-#             message_thread_id=update.message.message_thread_id,
-#         )
-
-
 @limit_usage
 async def rules(update: Update, context):
     if update.message:
         await update.message.reply_text(
-            'čítali ste kanál <a href="https://t.me/c/2307996875/4/52">ASAP</a>?',
+            'čítali ste kanál <a href="https://t.me/c/2307996875/4/224677">ASAP</a>?',
             parse_mode="HTML"
         )
 
@@ -84,7 +73,7 @@ async def moodle(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=56,
+            message_id=224679,
             message_thread_id=update.message.message_thread_id,
         )
 
@@ -95,7 +84,7 @@ async def links(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=57,
+            message_id=224678,
             message_thread_id=update.message.message_thread_id,
         )
 
@@ -104,7 +93,7 @@ async def links(update: Update, context):
 async def scores(update: Update, context):
     if update.message:
         await update.message.reply_text(
-            'Čítali ste kanál <a href="https://t.me/c/2307996875/4/63">ASAP</a>?',
+            'Čítali ste kanál <a href="https://t.me/c/2307996875/4/224680">ASAP</a>?',
             parse_mode="HTML"
         )
 
@@ -115,7 +104,7 @@ async def plan(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=67,
+            message_id=224681,
             message_thread_id=update.message.message_thread_id
         )
 
@@ -126,7 +115,7 @@ async def maptuke(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=68,
+            message_id=224682,
             message_thread_id=update.message.message_thread_id
         )
 
@@ -137,7 +126,7 @@ async def map5p(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=69,
+            message_id=224683,
             message_thread_id=update.message.message_thread_id
         )
 
@@ -148,7 +137,7 @@ async def studijne(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=72,
+            message_id=224684,
             message_thread_id=update.message.message_thread_id
         )
 
@@ -159,7 +148,7 @@ async def schedule(update: Update, context):
         await context.bot.forward_message(
             chat_id=update.effective_chat.id,
             from_chat_id=CHAT_ID,
-            message_id=4463,
+            message_id=224685,
             message_thread_id=update.message.message_thread_id
         )
 

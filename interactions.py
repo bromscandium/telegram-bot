@@ -53,39 +53,39 @@ async def reaction(update: Update, context):
             next_reaction = random.randint(100, 170)
 
 
-# @personal_limit_usage(12000)
-# async def bless(update: Update, context):
-#     boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
-#     if (not boosts.boosts) is True:
-#         await update.message.reply_text('Povoleny len pre boosterov!')
-#         return
-#
-#     for blacklisted in BLACKLIST:
-#         if blacklisted in update.message.from_user.id:
-#             print("blacklisted")
-#             return
-#
-#     if len(update.message.text.split()) < 2:
-#         await update.message.reply_text('Prosim, napiste v tomto formate: /bless VasTitul.')
-#         return
-#     new_title = " ".join(update.message.text.split()[1:])
-#
-#     chat_admins = await context.bot.get_chat_administrators(chat_id=CHAT_ID)
-#     user_is_admin = any(admin.user.id == update.message.from_user.id for admin in chat_admins)
-#     if not user_is_admin:
-#         await context.bot.promote_chat_member(
-#             chat_id=CHAT_ID,
-#             user_id=update.message.from_user.id,
-#             can_post_messages=True,
-#             can_manage_chat=True
-#         )
-#
-#     await context.bot.set_chat_administrator_custom_title(
-#         chat_id=CHAT_ID,
-#         user_id=update.message.from_user.id,
-#         custom_title=new_title
-#     )
-#     await update.message.reply_text(f'Tvoj novy titul: {new_title}')
+@personal_limit_usage(12000)
+async def bless(update: Update, context):
+    boosts = await context.bot.get_user_chat_boosts(chat_id=CHAT_ID, user_id=update.message.from_user.id)
+    if (not boosts.boosts) is True:
+        await update.message.reply_text('Povoleny len pre boosterov!')
+        return
+
+    for blacklisted in BLACKLIST:
+        if blacklisted in update.message.from_user.id:
+            print("blacklisted")
+            return
+
+    if len(update.message.text.split()) < 2:
+        await update.message.reply_text('Prosim, napiste v tomto formate: /bless VasTitul.')
+        return
+    new_title = " ".join(update.message.text.split()[1:])
+
+    chat_admins = await context.bot.get_chat_administrators(chat_id=CHAT_ID)
+    user_is_admin = any(admin.user.id == update.message.from_user.id for admin in chat_admins)
+    if not user_is_admin:
+        await context.bot.promote_chat_member(
+            chat_id=CHAT_ID,
+            user_id=update.message.from_user.id,
+            can_post_messages=True,
+            can_manage_chat=True
+        )
+
+    await context.bot.set_chat_administrator_custom_title(
+        chat_id=CHAT_ID,
+        user_id=update.message.from_user.id,
+        custom_title=new_title
+    )
+    await update.message.reply_text(f'Tvoj novy titul: {new_title}')
 
 
 async def meme(update: Update, context):
@@ -124,8 +124,8 @@ async def weather(update: Update, context):
     feels_like = data["main"]["feels_like"]
     description = data["weather"][0]["description"].capitalize()
     humidity = data["main"]["humidity"]
-    sunrise = datetime.fromtimestamp(data["sys"]["sunrise"]).strftime("%H:%M")
-    sunset = datetime.fromtimestamp(data["sys"]["sunset"]).strftime("%H:%M")
+    sunrise = (datetime.fromtimestamp(data["sys"]["sunrise"]) + timedelta(hours=2)).strftime("%H:%M")
+    sunset = (datetime.fromtimestamp(data["sys"]["sunset"]) + timedelta(hours=2)).strftime("%H:%M")
     wind = data["wind"]["speed"]
     clouds = data["clouds"]["all"]
 
@@ -136,7 +136,7 @@ async def weather(update: Update, context):
         f"Vlhkosť: {humidity}%\n"
         f"Vietor: {wind} m/s\n"
         f"Oblačnosť: {clouds}%\n\n"
-        f"Východ: {sunrise}, 🌇 Západ: {sunset}"
+        f"Východ: {sunrise}, Západ: {sunset}"
     )
 
     await update.message.reply_text(msg)
