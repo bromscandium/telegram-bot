@@ -5,7 +5,7 @@ from datetime import datetime
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID")
-ADMINS_ID = list(map(int, os.getenv("ADMINS_ID", "").split(",")))
+ADMINS_ID = os.getenv("ADMINS_ID")
 GRANT_ADMINS_ID = list(map(int, os.getenv("GRANT_ADMINS_ID ","").split(",")))
 DATABASE = os.getenv("DATABASE")
 LINK = os.getenv("LINK")
